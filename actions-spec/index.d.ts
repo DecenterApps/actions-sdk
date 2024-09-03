@@ -49,12 +49,7 @@ export type ActionInputType =
 /**
  * Linked action types
  */
-export type LinkedActionType =
-  | "link"
-  | "action"
-  | "inline-action"
-  | "tx"
-  | "tx-multi";
+export type LinkedActionType = "link" | "action" | "tx" | "tx-multi";
 
 /**
  * Base interface for all linked actions
@@ -78,14 +73,6 @@ export interface LinkAction extends LinkedActionBase {
 export interface ActionReference extends LinkedActionBase {
   type: "action";
   cid: string;
-}
-
-/**
- * Inline action type linked action
- */
-export interface InlineAction extends LinkedActionBase {
-  type: "inline-action";
-  data: Action;
 }
 
 /**
@@ -134,7 +121,6 @@ export interface TxMultiAction extends LinkedActionBase {
 export type LinkedAction =
   | LinkAction
   | ActionReference
-  | InlineAction
   | TxAction
   | TxMultiAction;
 

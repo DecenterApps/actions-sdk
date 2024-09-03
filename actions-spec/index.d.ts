@@ -54,7 +54,8 @@ export type LinkedActionType =
   | "action"
   | "inline-action"
   | "tx"
-  | "tx-multi";
+  | "tx-multi"
+  | "transfer-action";
 
 /**
  * Base interface for all linked actions
@@ -129,6 +130,14 @@ export interface TxMultiAction extends LinkedActionBase {
 }
 
 /**
+ * Transfer type linked action
+ */
+export interface TransferAction extends LinkedActionBase {
+  type: "transfer-action";
+  value: string;
+}
+
+/**
  * Union type for all possible linked actions
  */
 export type LinkedAction =
@@ -136,7 +145,8 @@ export type LinkedAction =
   | ActionReference
   | InlineAction
   | TxAction
-  | TxMultiAction;
+  | TxMultiAction
+  | TransferAction;
 
 /**
  * Global variables recognized by extensions/clients

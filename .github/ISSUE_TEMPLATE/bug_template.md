@@ -1,3 +1,8 @@
+---
+name: Bug Report Template
+about: "For bug reports. Please fill in the template with as much detail as possible."
+---
+
 ## Describe the bug
 A clear and concise description of what the bug is.
 

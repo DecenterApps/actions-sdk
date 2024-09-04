@@ -19,5 +19,8 @@
     "files": [
         "index.d.ts"
     ],
-    "description": "A standardized interfaces for defining actions"
+    "description": "A standardized interfaces for defining actions",
+    "devDependencies": {
+        "typescript": "^5.5.4"
+    }
 }

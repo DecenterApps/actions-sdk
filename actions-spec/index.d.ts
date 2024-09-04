@@ -82,14 +82,6 @@ export interface ActionReference extends LinkedActionBase {
 }
 
 /**
- * Inline action type linked action
- */
-export interface InlineAction extends LinkedActionBase {
-  type: "inline-action";
-  data: Action;
-}
-
-/**
  * Transaction type linked action
  */
 export interface TxAction extends LinkedActionBase {
@@ -143,7 +135,6 @@ export interface TransferAction extends LinkedActionBase {
 export type LinkedAction =
   | LinkAction
   | ActionReference
-  | InlineAction
   | TxAction
   | TxMultiAction
   | TransferAction;

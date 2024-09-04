@@ -91,6 +91,7 @@ export interface TxAction extends LinkedActionBase {
     address: string;
     abi: string;
     parameters: ResolvedParameter[];
+    value?: string;
   };
   success: {
     message: string;
@@ -111,6 +112,7 @@ export interface TxMultiAction extends LinkedActionBase {
     address: string;
     abi: string;
     parameters: ResolvedParameter[];
+    value?: string;
   }>;
   success: {
     message: string;

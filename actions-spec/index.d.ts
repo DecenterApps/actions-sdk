@@ -15,7 +15,6 @@ export interface Action {
     icon: string;
     description: string;
     label: string;
-    inputs?: ActionInput[];
     links?: LinkedAction[];
     error?: ActionError;
 }
@@ -24,10 +23,28 @@ export interface Action {
  * Input field for an Action
  */
 export interface ActionInput {
-    id: string;
     type: ActionInputType;
+    scope: InputScope;
     label?: string;
     required?: boolean;
+    pattern?: string;
+}
+
+export interface ActionInputSelectable extends ActionInput {
+    options: Array<{
+        label: string;
+        value: string;
+        selected?: boolean;
+    }>;
+}
+
+/**
+ * Input scope for an Action
+ */
+export enum InputScope {
+    User,
+    State,
+    Global,
 }
 
 /**
@@ -52,7 +69,6 @@ export type ActionInputType =
 export type LinkedActionType =
     | 'link'
     | 'action'
-    | 'inline-action'
     | 'tx'
     | 'tx-multi'
     | 'transfer-action';
@@ -90,7 +106,7 @@ export interface TxAction extends LinkedActionBase {
     txData: {
         address: string;
         abi: string;
-        parameters: ResolvedParameter[];
+        parameters: TypedActionParameter[];
         value?: string;
     };
     success: {
@@ -111,7 +127,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: ResolvedParameter[];
+        parameters: TypedActionParameter[];
         value?: string;
     }>;
     success: {
@@ -142,30 +158,9 @@ export type LinkedAction =
     | TransferAction;
 
 /**
- * Global variables recognized by extensions/clients
+ * Helper type for resolving parameters to their respective types
  */
-export enum GlobalVariable {
-    GLOBAL_WALLET_ADDRESS = 'global.walletAddress',
-}
-
-/**
- * User input reference
- */
-export type UserInput = `userInput.${string}`;
-
-/**
- * State variable reference
- */
-export type StateVariable = `state.${string}`;
-
-/**
- * Helper type for resolving parameters
- */
-export type ResolvedParameter =
-    | string
-    | GlobalVariable
-    | UserInput
-    | StateVariable;
+export type TypedActionParameter = ActionInput | ActionInputSelectable;
 
 /**
  * Error message that can be returned from an Action

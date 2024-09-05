@@ -47,7 +47,7 @@ export interface ActionInputSelectable extends ActionInput {
  */
 export enum InputScope {
     User,
-    State,
+    Constant,
     Global,
 }
 

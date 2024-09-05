@@ -152,7 +152,7 @@ export interface TxMultiAction extends LinkedActionBase {
 #### `transfer-action`
 
 -   **Type**: `transfer-action`
--   **Description**: Represents a token transfer action. This type is used to specify a transfer of value from one address to another.
+-   **Description**: Represents a native currency transfer action. This type is used to specify a transfer of value from one address to another.
 
 -   **Fields**:
     -   `value`: The amount to be transferred.
@@ -166,5 +166,5 @@ export interface TransferAction extends LinkedActionBase {
 
 Clients must handle each linked action type according to its defined purpose:
 
--   For `tx` and `tx-multi` types, clients should prepare and execute the blockchain transactions as specified.
+-   For `tx`, `tx-multi` and `transfer` types, clients should prepare and execute the blockchain transactions as specified.
 -   For `link` and `action` types, clients should redirect or reference the specified URL or action CID.

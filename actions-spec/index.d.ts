@@ -168,6 +168,7 @@ export interface TxMultiAction extends LinkedActionBase {
  */
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
+    address: TypedActionParameter;
     value: string;
 }
 
@@ -184,7 +185,7 @@ export type LinkedAction =
 /**
  * Helper type for resolving parameters to their respective types
  */
-export type TypedActionParameter = ActionInput | ActionInputSelectable;
+export type TypedActionParameter = string | ActionInput | ActionInputSelectable;
 
 /**
  * Error message that can be returned from an Action

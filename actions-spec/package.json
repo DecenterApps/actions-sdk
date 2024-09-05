@@ -1,0 +1,26 @@
+{
+    "private": false,
+    "name": "actions-spec",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "prepublishOnly": "npm run test-typescript",
+        "test-typescript": "tsc --noEmit"
+    },
+    "keywords": [
+        "typescript",
+        "types",
+        "actions",
+        "protocol"
+    ],
+    "author": "Decenter R&D",
+    "license": "MIT",
+    "types": "./index.d.ts",
+    "files": [
+        "index.d.ts"
+    ],
+    "description": "A standardized interfaces for defining actions",
+    "devDependencies": {
+        "typescript": "^5.5.4"
+    }
+}

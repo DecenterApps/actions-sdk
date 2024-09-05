@@ -29,6 +29,9 @@ export interface ActionConstant {
     value: string | number | boolean;
 }
 
+/**
+ * Supported types for Constants
+ */
 export type ActionConstantType =
     | 'string'
     | 'number'

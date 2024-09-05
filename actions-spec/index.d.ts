@@ -25,12 +25,13 @@ export interface Action {
 export interface ActionInput {
     type: ActionInputType;
     scope: InputScope;
-    label?: string;
+    label: string;
     required?: boolean;
     pattern?: string;
 }
 
 export interface ActionInputSelectable extends ActionInput {
+    scope: InputScope.User;
     options: Array<{
         label: string;
         value: string;

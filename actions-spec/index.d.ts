@@ -16,28 +16,8 @@ export interface Action {
     description: string;
     label: string;
     links?: LinkedAction[];
-    constants?: ActionConstant[];
     error?: ActionError;
 }
-
-/**
- * Action Constant interface
- */
-export interface ActionConstant {
-    label: string;
-    type: ActionConstantType;
-    value: string | number | boolean;
-}
-
-/**
- * Supported types for Constants
- */
-export type ActionConstantType =
-    | 'string'
-    | 'number'
-    | 'boolean'
-    | 'address'
-    | 'timestamp';
 
 /**
  * Input field for an Action
@@ -67,7 +47,6 @@ export interface ActionInputSelectable extends ActionInput {
  */
 export enum InputScope {
     User,
-    Constant,
     Global,
 }
 

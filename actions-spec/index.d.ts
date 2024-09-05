@@ -30,6 +30,9 @@ export interface ActionInput {
     pattern?: string;
 }
 
+/**
+ * Selectable input field for an Action
+ */
 export interface ActionInputSelectable extends ActionInput {
     scope: InputScope.User;
     options: Array<{

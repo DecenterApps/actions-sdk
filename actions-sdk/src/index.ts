@@ -1,8 +1,5 @@
 import { Action } from 'actions-spec';
 import pinataSdk from '@pinata/sdk';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 /*
  * PinataCredentials type for API Key and Secret Key

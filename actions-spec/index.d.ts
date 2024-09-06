@@ -41,8 +41,8 @@ export interface ActionInput {
 /**
  * Selectable input field for an Action
  */
-export interface ActionInputSelectable extends ActionInput {
-    scope: InputScope.User;
+export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
+    scope: Extract<InputScope, 'USER'>;
     options: Array<{
         label: string;
         value: string;
@@ -53,10 +53,7 @@ export interface ActionInputSelectable extends ActionInput {
 /**
  * Input scope for an Action
  */
-export enum InputScope {
-    User,
-    Global,
-}
+export type InputScope = 'USER' | 'GLOBAL';
 
 /**
  * Supported input types for Action

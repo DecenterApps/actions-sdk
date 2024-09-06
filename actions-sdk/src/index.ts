@@ -5,12 +5,23 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 /*
+ * PinataCredentials type for API Key and Secret Key
+ */
+type PinataCredentials = {
+    apiKey: string;
+    apiSecretKey: string;
+};
+
+/*
  * Deploy the Action object to IPFS using Pinata SDK
  */
-export async function deployToIpfs(action: Action): Promise<string | Error> {
+export async function deployToIpfs(
+    action: Action,
+    pinataCredentials: PinataCredentials
+): Promise<string | Error> {
     // Validate the Action object using ajv schemas once helper functions are ready
     try {
-        const pinata = await _initPinata();
+        const pinata = await _initPinata(pinataCredentials);
         if (pinata instanceof Error) {
             return pinata;
         }
@@ -23,18 +34,20 @@ export async function deployToIpfs(action: Action): Promise<string | Error> {
 }
 
 /*
- * Initialize Pinata SDK with the API Key and Secret Key from the .env file
+ * Initialize Pinata SDK using the provided credentials
  */
-async function _initPinata(): Promise<pinataSdk | Error> {
+async function _initPinata(
+    pinataCredentials: PinataCredentials
+): Promise<pinataSdk | Error> {
     try {
         const pinata = new pinataSdk(
-            process.env.PINATA_API_KEY,
-            process.env.PINATA_API_SECRET_KEY
+            pinataCredentials.apiKey,
+            pinataCredentials.apiSecretKey
         );
 
         const { authenticated } = await pinata.testAuthentication();
         if (!authenticated) {
-            return new Error('Error authenticating with Pinata');
+            return new Error('Error authenticating with Pinata!');
         }
 
         return pinata;

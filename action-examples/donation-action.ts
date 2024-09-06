@@ -48,7 +48,10 @@ const links: LinkedAction[] = [
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
-                '10',
+                {
+                    type: 'constant',
+                    value: 10000000000000000000,
+                },
             ],
         },
         success: {
@@ -72,7 +75,10 @@ const links: LinkedAction[] = [
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
-                '50',
+                {
+                    type: 'constant',
+                    value: 50000000000000000000,
+                },
             ],
         },
         success: {
@@ -96,7 +102,10 @@ const links: LinkedAction[] = [
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
-                '100',
+                {
+                    type: 'constant',
+                    value: 100000000000000000000,
+                },
             ],
         },
         success: {

@@ -20,6 +20,14 @@ export interface Action {
 }
 
 /**
+ * Constant parameter for an Action
+ */
+export interface ConstantParameter {
+    type: 'constant';
+    value: string | number | boolean;
+}
+
+/**
  * Input field for an Action
  */
 export interface ActionInput {
@@ -164,7 +172,10 @@ export type LinkedAction =
 /**
  * Helper type for resolving parameters to their respective types
  */
-export type TypedActionParameter = string | ActionInput | ActionInputSelectable;
+export type TypedActionParameter =
+    | ConstantParameter
+    | ActionInput
+    | ActionInputSelectable;
 
 /**
  * Error message that can be returned from an Action

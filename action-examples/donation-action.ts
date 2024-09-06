@@ -15,13 +15,13 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
-                    scope: InputScope.Global,
+                    scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
                 {
                     type: 'number',
-                    scope: InputScope.User,
+                    scope: 'USER',
                     label: 'Amount',
                     required: true,
                 },
@@ -44,7 +44,7 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
-                    scope: InputScope.Global,
+                    scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
@@ -71,7 +71,7 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
-                    scope: InputScope.Global,
+                    scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
@@ -98,7 +98,7 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
-                    scope: InputScope.Global,
+                    scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },

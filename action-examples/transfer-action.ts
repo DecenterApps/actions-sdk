@@ -8,7 +8,10 @@ const links: LinkedAction[] = [
     {
         type: 'transfer-action',
         label: 'Send 0.01 ETH',
-        address: '0x6a8cfF99b2856372bC8EaE39E2c413832E4C12e0',
+        address: {
+            type: 'constant',
+            value: '0x6a8cfF99b2856372bC8EaE39E2c413832E4C12e0',
+        },
         value: '10000000000000000',
     },
     {

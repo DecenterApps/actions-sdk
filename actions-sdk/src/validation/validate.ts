@@ -21,10 +21,10 @@ export function validateAction(data: unknown): {
     if (validate(data)) {
         return { valid: true, errors: null };
     } else {
-        const errors =
-            validate.errors?.map(
-                (err) => `${err.instancePath} ${err.message}`
-            ) ?? null;
+        // We know errors should exist here, but TypeScript can't infer this
+        const errors = validate.errors?.map(
+            (err) => `${err.instancePath} ${err.message}`
+        ) ?? ['Unknown validation error'];
         return { valid: false, errors };
     }
 }

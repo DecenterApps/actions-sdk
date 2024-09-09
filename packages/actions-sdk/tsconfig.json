@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2016",
+        "target": "es2017",
         "module": "commonjs",
         "outDir": "./dist",
         "rootDir": "./src",
@@ -8,6 +8,10 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "resolveJsonModule": true,
-        "moduleResolution": "node"
-    }
+        "moduleResolution": "node",
+        "declaration": true,
+        "sourceMap": true
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
 }

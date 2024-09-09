@@ -2,6 +2,10 @@ interface ChainIdConfig {
     [network: string]: number;
 }
 
+interface GlobalInputs {
+    [name: string]: string;
+}
+
 export const chainId: ChainIdConfig = {
     ETHEREUM_MAINNET: 1,
     ETHEREUM_GOERLI: 5,
@@ -18,4 +22,8 @@ export const chainId: ChainIdConfig = {
     AVALANCHE: 43114,
     LINEA: 59144,
     BLAST: 81457,
+};
+
+export const globalInputs: GlobalInputs = {
+    WALLET_ADDRESS: 'WALLET_ADDRESS',
 };

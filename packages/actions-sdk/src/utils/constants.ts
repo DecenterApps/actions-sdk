@@ -1,15 +1,27 @@
+/**
+ * Represents a configuration object that maps network names to chain IDs.
+ */
 interface ChainIdConfig {
     [network: string]: number;
 }
 
+/**
+ * Represents a collection of global inputs.
+ */
 interface GlobalInputs {
     [name: string]: string;
 }
 
+/**
+ * Represents a mapping of function names to their corresponding signatures.
+ */
 interface FuncSignatures {
     [funcName: string]: string;
 }
 
+/**
+ * Defines the chain IDs for various blockchain networks.
+ */
 export const chainId: ChainIdConfig = {
     ETHEREUM_MAINNET: 1,
     ETHEREUM_GOERLI: 5,
@@ -28,10 +40,16 @@ export const chainId: ChainIdConfig = {
     BLAST: 81457,
 };
 
+/**
+ * The global inputs object containing constant values.
+ */
 export const globalInputs: GlobalInputs = {
     WALLET_ADDRESS: 'WALLET_ADDRESS',
 };
 
+/**
+ * Defines the function signatures for ERC20.
+ */
 export const erc20FunctionSignatures: FuncSignatures = {
     NAME: 'name()',
     SYMBOL: 'symbol()',
@@ -43,6 +61,9 @@ export const erc20FunctionSignatures: FuncSignatures = {
     BALANCE_OF: 'balanceOf(address)',
 };
 
+/**
+ * Defines the function signatures for ERC721.
+ */
 export const erc721FunctionSignatures: FuncSignatures = {
     OWNER_OF: 'ownerOf(uint256)',
     BALANCE_OF: 'balanceOf(address)',

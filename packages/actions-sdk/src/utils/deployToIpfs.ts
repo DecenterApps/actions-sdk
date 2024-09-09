@@ -1,6 +1,8 @@
 import { Action } from 'actions-spec';
 import pinataSdk from '@pinata/sdk';
 
+import { validateAction } from './validation/validate';
+
 /*
  * PinataCredentials type for API Key and Secret Key
  */
@@ -16,7 +18,11 @@ export async function deployToIpfs(
     action: Action,
     pinataCredentials: PinataCredentials
 ): Promise<string | Error> {
-    // Validate the Action object using ajv schemas once helper functions are ready
+    const { valid, errors } = validateAction(action);
+    if (!valid) {
+        return new Error(`Action does not have a valid format: ${errors}`);
+    }
+
     try {
         const pinata = await _initPinata(pinataCredentials);
         if (pinata instanceof Error) {

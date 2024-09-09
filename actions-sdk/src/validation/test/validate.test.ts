@@ -1,4 +1,3 @@
-import exp from 'constants';
 import { validateAction } from '../validate';
 import { Action, LinkedAction, ActionError } from 'actions-spec';
 

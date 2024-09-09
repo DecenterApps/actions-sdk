@@ -17,7 +17,7 @@ import {
 /**
  * Represents the JSON schema for an ActionError object.
  */
-const actionErrorSchema: JSONSchemaType<ActionError> = {
+export const actionErrorSchema: JSONSchemaType<ActionError> = {
     type: 'object',
     properties: {
         message: { type: 'string' },
@@ -29,7 +29,7 @@ const actionErrorSchema: JSONSchemaType<ActionError> = {
 /**
  * Represents the JSON schema for a ConstantParameter object.
  */
-const constantParameterSchema: JSONSchemaType<ConstantParameter> = {
+export const constantParameterSchema: JSONSchemaType<ConstantParameter> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'constant' },
@@ -42,7 +42,7 @@ const constantParameterSchema: JSONSchemaType<ConstantParameter> = {
 /**
  * Represents the JSON schema for ActionInput object.
  */
-const actionInputSchema: JSONSchemaType<ActionInput> = {
+export const actionInputSchema: JSONSchemaType<ActionInput> = {
     type: 'object',
     properties: {
         type: {
@@ -71,49 +71,51 @@ const actionInputSchema: JSONSchemaType<ActionInput> = {
 /**
  * Represents the JSON schema for ActionInputSelectable object.
  */
-const actionInputSelectableSchema: JSONSchemaType<ActionInputSelectable> = {
-    type: 'object',
-    properties: {
-        type: { type: 'string', const: 'select' },
-        scope: { type: 'string', enum: ['USER'] },
-        label: { type: 'string' },
-        options: {
-            type: 'array',
-            items: {
-                type: 'object',
-                properties: {
-                    label: { type: 'string' },
-                    value: { type: 'string' },
-                    selected: { type: 'boolean', nullable: true },
+export const actionInputSelectableSchema: JSONSchemaType<ActionInputSelectable> =
+    {
+        type: 'object',
+        properties: {
+            type: { type: 'string', const: 'select' },
+            scope: { type: 'string', enum: ['USER'] },
+            label: { type: 'string' },
+            options: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    properties: {
+                        label: { type: 'string' },
+                        value: { type: 'string' },
+                        selected: { type: 'boolean', nullable: true },
+                    },
+                    required: ['label', 'value'],
+                    additionalProperties: false,
                 },
-                required: ['label', 'value'],
-                additionalProperties: false,
             },
+            required: { type: 'boolean', nullable: true },
+            pattern: { type: 'string', nullable: true },
         },
-        required: { type: 'boolean', nullable: true },
-        pattern: { type: 'string', nullable: true },
-    },
-    required: ['type', 'scope', 'label', 'options'],
-    additionalProperties: false,
-};
+        required: ['type', 'scope', 'label', 'options'],
+        additionalProperties: false,
+    };
 
 /**
  * Represents the JSON schema for TypedActionParamete object.
  */
-const typedActionParameterSchema: JSONSchemaType<TypedActionParameter> = {
-    type: 'object',
-    oneOf: [
-        { $ref: '#/definitions/constantParameter' },
-        { $ref: '#/definitions/actionInput' },
-        { $ref: '#/definitions/actionInputSelectable' },
-    ],
-    required: ['type'],
-};
+export const typedActionParameterSchema: JSONSchemaType<TypedActionParameter> =
+    {
+        type: 'object',
+        oneOf: [
+            { $ref: '#/definitions/constantParameter' },
+            { $ref: '#/definitions/actionInput' },
+            { $ref: '#/definitions/actionInputSelectable' },
+        ],
+        required: ['type'],
+    };
 
 /**
  * Represents the JSON schema for TxAction object.
  */
-const txActionSchema: JSONSchemaType<TxAction> = {
+export const txActionSchema: JSONSchemaType<TxAction> = {
     type: 'object',
     properties: {
         label: { type: 'string' },
@@ -158,7 +160,7 @@ const txActionSchema: JSONSchemaType<TxAction> = {
 /**
  * Represents the JSON schema for TxMultiAction object.
  */
-const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
+export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'tx-multi' },
@@ -206,7 +208,7 @@ const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
 /**
  * Represents the JSON schema for LinkAction object.
  */
-const linkActionSchema: JSONSchemaType<LinkAction> = {
+export const linkActionSchema: JSONSchemaType<LinkAction> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'link' },
@@ -220,7 +222,7 @@ const linkActionSchema: JSONSchemaType<LinkAction> = {
 /**
  * Represents the JSON schema for ActionReference object.
  */
-const actionReferenceSchema: JSONSchemaType<ActionReference> = {
+export const actionReferenceSchema: JSONSchemaType<ActionReference> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'action' },
@@ -234,7 +236,7 @@ const actionReferenceSchema: JSONSchemaType<ActionReference> = {
 /**
  * Represents the JSON schema for LinkedAction object.
  */
-const linkedActionSchema: JSONSchemaType<LinkedAction> = {
+export const linkedActionSchema: JSONSchemaType<LinkedAction> = {
     type: 'object',
     oneOf: [
         { $ref: '#/definitions/linkAction' },
@@ -250,7 +252,7 @@ const linkedActionSchema: JSONSchemaType<LinkedAction> = {
 /**
  * Represents the JSON schema for Action object.
  */
-const actionSchema: JSONSchemaType<Action> = {
+export const actionSchema: JSONSchemaType<Action> = {
     type: 'object',
     properties: {
         title: { type: 'string' },

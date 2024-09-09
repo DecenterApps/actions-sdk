@@ -1,4 +1,4 @@
-import { Action, ActionError, LinkedAction, InputScope } from 'actions-spec';
+import { Action, ActionError, LinkedAction, InputScope } from 'actions-sdk';
 
 const error: ActionError = {
     message: 'Error displaying blink',

@@ -9,6 +9,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "actions-spec": "^1.0.5-0"
+        "actions-sdk": "^1.0.3"
     }
 }

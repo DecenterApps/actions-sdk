@@ -168,3 +168,140 @@ Clients must handle each linked action type according to its defined purpose:
 
 -   For `tx`, `tx-multi` and `transfer` types, clients should prepare and execute the blockchain transactions as specified.
 -   For `link` and `action` types, clients should redirect or reference the specified URL or action CID.
+
+## Action Inputs
+
+Action inputs define the various types of data that can be required for an action. These inputs allow for user interaction and customization of actions.
+
+### Action Input
+
+Action inputs are represented by the `ActionInput` interface, which includes several fields to define the input's characteristics:
+
+```ts
+export interface ActionInput {
+    type: ActionInputType;
+    scope: InputScope;
+    label: string;
+    required?: boolean;
+    pattern?: string;
+}
+```
+
+#### Fields Description
+
+-   `type`: Specifies the type of input field (see [Input Types](#input-types)).
+-   `scope`: Defines where the input originates (see [Input Scopes](#input-scopes)).
+-   `label`: A user-friendly label for the input field.
+-   `required`: An optional boolean indicating whether the input is mandatory.
+-   `pattern`: An optional string representing a regular expression pattern for input validation.
+
+### Selectable Inputs
+
+For inputs that require selection from predefined options, the `ActionInputSelectable` interface is used:
+
+```ts
+export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
+    scope: Extract<InputScope, 'USER'>;
+    options: Array<{
+        label: string;
+        value: string;
+        selected?: boolean;
+    }>;
+}
+```
+
+This interface extends `ActionInput` but replaces the `scope` field with a more specific type and adds an `options` array for selectable values.
+
+### Input Types
+
+The following input types are supported:
+
+```ts
+export type ActionInputType =
+    | 'text'
+    | 'email'
+    | 'url'
+    | 'number'
+    | 'date'
+    | 'datetime-local'
+    | 'checkbox'
+    | 'radio'
+    | 'textarea'
+    | 'select'
+    | 'address';
+```
+
+Clients should render appropriate input fields based on these types. For example:
+
+-   'text', 'email', 'url', 'number' should be rendered as single-line input fields with appropriate validation.
+-   'date' and 'datetime-local' should be rendered as date/time pickers.
+-   'checkbox' and 'radio' should be rendered as selectable options.
+-   'textarea' should be rendered as a multi-line input field.
+-   'select' should be rendered as a dropdown or list of options.
+-   'address' should be rendered as an input field specifically for blockchain addresses, potentially with address validation.
+
+## Input Scopes
+
+Input scopes define the origin and handling of input data. There are two types of input scopes:
+
+```ts
+export type InputScope = 'USER' | 'GLOBAL';
+```
+
+-   `USER`: Indicates that the input should be provided by the user. Clients should render an input field for these inputs.
+-   `GLOBAL`: Represents inputs that are handled globally by the client. These might include data like the user's wallet address or other pre-configured values. Clients should not render input fields for global inputs but instead use pre-defined values.
+
+Clients must respect these scopes when processing inputs:
+
+-   For `USER` scoped inputs, always prompt the user for input.
+-   For `GLOBAL` scoped inputs, use predefined values without user interaction.
+
+## Typed Action Parameters
+
+Typed action parameters are used to specify the nature and origin of data used in actions. They can be one of three types:
+
+```ts
+export type TypedActionParameter =
+    | ConstantParameter
+    | ActionInput
+    | ActionInputSelectable;
+```
+
+### Constant Parameter
+
+Constant parameters represent fixed values that don't require user input:
+
+```ts
+export interface ConstantParameter {
+    type: 'constant';
+    value: string | number | boolean;
+}
+```
+
+Clients should use the provided `value` directly without any user interaction.
+
+### Action Input and Action Input Selectable
+
+These types correspond to the `ActionInput` and `ActionInputSelectable` interfaces described earlier. Clients should handle these based on their respective specifications.
+
+## Action Errors
+
+Action errors provide a standardized way to communicate issues that occur during action execution:
+
+```ts
+export interface ActionError {
+    message: string;
+}
+```
+
+The `message` field contains a user-friendly error description. Clients should display this message to users when an error occurs during action processing.
+
+### Error Handling
+
+Clients should implement robust error handling:
+
+1. Display the error message to the user in a clear and noticeable manner.
+2. Provide options for the user to retry the action or return to a previous state.
+3. Log detailed error information for debugging purposes, if possible.
+
+By following these guidelines, clients can ensure a consistent and user-friendly experience when dealing with action-related errors.

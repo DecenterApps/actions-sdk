@@ -234,6 +234,21 @@ export const actionReferenceSchema: JSONSchemaType<ActionReference> = {
 };
 
 /**
+ * Represents the JSON schema for TransferAction object.
+ */
+export const transferActionSchema: JSONSchemaType<TransferAction> = {
+    type: 'object',
+    properties: {
+        type: { type: 'string', const: 'transfer-action' },
+        label: { type: 'string' },
+        address: typedActionParameterSchema,
+        value: { type: 'string' },
+    },
+    required: ['type', 'label', 'address', 'value'],
+    additionalProperties: false,
+};
+
+/**
  * Represents the JSON schema for LinkedAction object.
  */
 export const linkedActionSchema: JSONSchemaType<LinkedAction> = {

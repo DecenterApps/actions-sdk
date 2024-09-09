@@ -1,14 +1,18 @@
 {
     "name": "actions-sdk",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "description": "A JavaScript SDK for deploying and validating decentralized actions using IPFS and Pinata.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
         "test": "jest",
-        "prepublish": "npm run build && npm test"
+        "prepublishOnly": "npm run build && npm test",
+        "postpublish": "rm -rf dist"
     },
+    "files": [
+        "dist"
+    ],
     "author": "Decenter R&D",
     "license": "MIT",
     "dependencies": {

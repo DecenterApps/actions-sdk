@@ -84,8 +84,8 @@ export type ActionInputType =
  * Base interface for all derrived inputs
  * Derrived inputs are inputs that are calculated based on other inputs
  */
-export interface DerrivedInput {
-    type: 'derrived';
+export interface DerivedInput {
+    type: 'derived';
     operation: 'add' | 'multiply' | 'subtract' | 'divide';
     values: TypedActionParameter[];
 }
@@ -94,7 +94,7 @@ export interface DerrivedInput {
  * Base interface for all contract read inputs
  * This input type is used to read data from a smart contract
  */
-export interface ContratReadInput {
+export interface ContractReadInput {
     type: 'contract-read';
     address: string;
     abi: string;
@@ -203,8 +203,8 @@ export type TypedActionParameter =
     | ConstantParameter
     | ActionInput
     | ActionInputSelectable
-    | DerrivedInput
-    | ContratReadInput;
+    | DerivedInput
+    | ContractReadInput;
 /**
  * Error message that can be returned from an Action
  */

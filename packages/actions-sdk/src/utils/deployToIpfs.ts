@@ -1,7 +1,7 @@
 import { Action } from 'actions-spec';
 import pinataSdk from '@pinata/sdk';
 
-import { validateAction } from './validation/validate';
+import { validateAction } from '../validation/validate';
 
 /*
  * PinataCredentials type for API Key and Secret Key

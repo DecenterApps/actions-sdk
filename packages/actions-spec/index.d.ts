@@ -89,6 +89,18 @@ export interface DerrivedInput {
     operation: 'add' | 'multiply' | 'subtract' | 'divide';
     values: TypedActionParameter[];
 }
+
+/**
+ * Base interface for all contract read inputs
+ * This input type is used to read data from a smart contract
+ */
+export interface ContratReadInput {
+    type: 'contract-read';
+    address: string;
+    abi: string;
+    parameters: TypedActionParameter[];
+}
+
 /**
  * Linked action types
  */
@@ -191,7 +203,8 @@ export type TypedActionParameter =
     | ConstantParameter
     | ActionInput
     | ActionInputSelectable
-    | DerrivedInput;
+    | DerrivedInput
+    | ContratReadInput;
 /**
  * Error message that can be returned from an Action
  */

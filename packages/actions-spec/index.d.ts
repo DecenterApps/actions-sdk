@@ -154,6 +154,10 @@ export interface TxMultiAction extends LinkedActionBase {
     error: {
         message: string;
     };
+    displayConfig: {
+        displayMode: 'combined' | 'sequential';
+        primaryActionIndex?: number; // Only used when displayMode is 'combined'
+    };
 }
 
 /**

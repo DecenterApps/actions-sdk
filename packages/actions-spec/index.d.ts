@@ -81,6 +81,15 @@ export type ActionInputType =
     | 'address';
 
 /**
+ * Base interface for all derrived inputs
+ * Derrived inputs are inputs that are calculated based on other inputs
+ */
+export interface DerrivedInput {
+    type: 'derrived';
+    operation: 'add' | 'multiply' | 'subtract' | 'divide';
+    values: TypedActionParameter[];
+}
+/**
  * Linked action types
  */
 export type LinkedActionType =
@@ -181,8 +190,8 @@ export type LinkedAction =
 export type TypedActionParameter =
     | ConstantParameter
     | ActionInput
-    | ActionInputSelectable;
-
+    | ActionInputSelectable
+    | DerrivedInput;
 /**
  * Error message that can be returned from an Action
  */

@@ -9,7 +9,7 @@ export {
 } from './utils/constants';
 
 // Exporting the deployToIpfs function from deployToIpfs.ts
-export { deployToIpfs } from './utils/deployToIpfs';
+export { deployToIpfs, PinataCredentials } from './utils/deployToIpfs';
 
 // Exporting the validateAction function from validation/validate.ts
 export { validateAction } from './validation/validate';

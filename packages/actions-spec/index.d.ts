@@ -85,8 +85,8 @@ export type ActionInputType =
  * Derrived inputs are inputs that are calculated based on other inputs
  */
 export interface ComputedInput {
-    type: 'derived';
-    operation: 'add' | 'multiply' | 'subtract' | 'divide';
+    type: 'computed';
+    operation: 'add' | 'multiply';
     values: TypedActionParameter[];
 }
 

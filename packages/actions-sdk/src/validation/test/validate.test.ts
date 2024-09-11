@@ -118,6 +118,244 @@ describe('validateAction', () => {
             expect(result.valid).toBe(true);
             expect(result.errors).toBeNull();
         });
+
+        test('should validate an action with tx-multi', () => {
+            const txMultiAction: Action = {
+                title: 'Multi-Transaction Action',
+                icon: 'icon-url',
+                description: 'This action has a tx-multi link',
+                label: 'Multi-Tx',
+                links: [
+                    {
+                        type: 'tx-multi',
+                        label: 'Perform Multiple Transactions',
+                        chainId: 1,
+                        txData: [
+                            {
+                                address: '0x123...',
+                                abi: 'function1(uint256)',
+                                parameters: [
+                                    {
+                                        type: 'constant',
+                                        value: 100,
+                                    },
+                                ],
+                            },
+                            {
+                                address: '0x456...',
+                                abi: 'function2(address)',
+                                parameters: [
+                                    {
+                                        type: 'reused',
+                                        sourceTxIndex: 0,
+                                        sourceParamIndex: 0,
+                                    },
+                                ],
+                            },
+                        ],
+                        displayConfig: {
+                            displayMode: 'sequential',
+                        },
+                        success: {
+                            message: 'All transactions successful!',
+                        },
+                        error: {
+                            message: 'One or more transactions failed.',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(txMultiAction);
+            expect(result.valid).toBe(true);
+            expect(result.errors).toBeNull();
+        });
+
+        test('should validate an action with transfer-action', () => {
+            const transferAction: Action = {
+                title: 'Transfer Action',
+                icon: 'icon-url',
+                description: 'This action has a transfer-action link',
+                label: 'Transfer',
+                links: [
+                    {
+                        type: 'transfer-action',
+                        label: 'Send ETH',
+                        address: {
+                            type: 'text',
+                            scope: 'USER',
+                            label: 'Recipient Address',
+                        },
+                        value: '1000000000000000000', // 1 ETH in wei
+                    },
+                ],
+            };
+
+            const result = validateAction(transferAction);
+            expect(result.valid).toBe(true);
+            expect(result.errors).toBeNull();
+        });
+
+        test('should validate an action with contract read input', () => {
+            const actionWithContractRead: Action = {
+                title: 'Contract Read Action',
+                icon: 'icon-url',
+                description: 'This action reads from a contract',
+                label: 'Read Contract',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Read Balance',
+                        chainId: 1,
+                        txData: {
+                            address:
+                                '0x1234567890123456789012345678901234567890',
+                            abi: 'balanceOf(address)',
+                            parameters: [
+                                {
+                                    type: 'contract-read',
+                                    address:
+                                        '0x9876543210987654321098765432109876543210',
+                                    abi: 'getUser(address)',
+                                    parameters: [
+                                        {
+                                            type: 'text',
+                                            scope: 'GLOBAL',
+                                            label: 'WALLET_ADDRESS',
+                                        },
+                                    ],
+                                    returnValueIndex: 0,
+                                },
+                            ],
+                        },
+                        success: {
+                            message: 'Balance read successfully',
+                        },
+                        error: {
+                            message: 'Failed to read balance',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(actionWithContractRead);
+            expect(result.valid).toBe(true);
+            expect(result.errors).toBeNull();
+        });
+
+        test('should validate an action with computed input', () => {
+            const actionWithComputedInput: Action = {
+                title: 'Computed Input Action',
+                icon: 'icon-url',
+                description: 'This action uses computed input',
+                label: 'Compute',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Send Tokens',
+                        chainId: 1,
+                        txData: {
+                            address:
+                                '0x1234567890123456789012345678901234567890',
+                            abi: 'transfer(address,uint256)',
+                            parameters: [
+                                {
+                                    type: 'text',
+                                    scope: 'USER',
+                                    label: 'Recipient Address',
+                                },
+                                {
+                                    type: 'computed',
+                                    operation: 'multiply',
+                                    values: [
+                                        {
+                                            type: 'number',
+                                            scope: 'USER',
+                                            label: 'Amount',
+                                        },
+                                        {
+                                            type: 'constant',
+                                            value: 1e18, // Convert to wei
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        success: {
+                            message: 'Tokens sent successfully',
+                        },
+                        error: {
+                            message: 'Failed to send tokens',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(actionWithComputedInput);
+            expect(result.valid).toBe(true);
+            expect(result.errors).toBeNull();
+        });
+
+        test('should validate a tx-multi action with combined display mode', () => {
+            const txMultiWithCombinedDisplay: Action = {
+                title: 'Multi-Transaction Action',
+                icon: 'icon-url',
+                description:
+                    'This action has a tx-multi link with combined display',
+                label: 'Multi-Tx Combined',
+                links: [
+                    {
+                        type: 'tx-multi',
+                        label: 'Perform Multiple Transactions',
+                        chainId: 1,
+                        txData: [
+                            {
+                                address:
+                                    '0x1234567890123456789012345678901234567890',
+                                abi: 'approve(address,uint256)',
+                                parameters: [
+                                    {
+                                        type: 'constant',
+                                        value: '0x9876543210987654321098765432109876543210',
+                                    },
+                                    {
+                                        type: 'number',
+                                        scope: 'USER',
+                                        label: 'Approval Amount',
+                                    },
+                                ],
+                            },
+                            {
+                                address:
+                                    '0x9876543210987654321098765432109876543210',
+                                abi: 'deposit(uint256)',
+                                parameters: [
+                                    {
+                                        type: 'reused',
+                                        sourceTxIndex: 0,
+                                        sourceParamIndex: 1,
+                                    },
+                                ],
+                            },
+                        ],
+                        displayConfig: {
+                            displayMode: 'combined',
+                            renderedTxIndex: 0,
+                        },
+                        success: {
+                            message: 'Approval and deposit successful!',
+                        },
+                        error: {
+                            message: 'Transaction failed.',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(txMultiWithCombinedDisplay);
+            expect(result.valid).toBe(true);
+            expect(result.errors).toBeNull();
+        });
     });
 
     describe('Should fail', () => {
@@ -177,6 +415,214 @@ describe('validateAction', () => {
             const result = validateAction('not an object');
             expect(result.valid).toBe(false);
             expect(result.errors).toContain(' must be object');
+        });
+
+        test('should invalidate an action with an invalid tx-multi link', () => {
+            const invalidAction: any = {
+                title: 'Invalid Multi-Tx Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid tx-multi link',
+                label: 'Invalid',
+                links: [
+                    {
+                        type: 'tx-multi',
+                        label: 'Invalid Multi-Tx',
+                        chainId: 1,
+                        txData: [
+                            {
+                                address: '0x123...',
+                                abi: 'function1(uint256)',
+                                // Missing parameters
+                            },
+                        ],
+                        // Missing displayConfig
+                        success: {
+                            message: 'Success',
+                        },
+                        error: {
+                            message: 'Error',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidAction);
+            expect(result.valid).toBe(false);
+            expect(result.errors).toContain(
+                "/links/0/txData/0 must have required property 'parameters'"
+            );
+            expect(result.errors).toContain(
+                "/links/0 must have required property 'displayConfig'"
+            );
+        });
+
+        test('should invalidate an action with an invalid transfer-action link', () => {
+            const invalidAction: any = {
+                title: 'Invalid Transfer Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid transfer-action link',
+                label: 'Invalid',
+                links: [
+                    {
+                        type: 'transfer-action',
+                        label: 'Invalid Transfer',
+                        // Missing address
+                        value: 'not a number',
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidAction);
+            expect(result.valid).toBe(false);
+            expect(result.errors).toContain(
+                "/links/0 must have required property 'address'"
+            );
+        });
+
+        test('should invalidate an action with invalid contract read input', () => {
+            const invalidContractReadAction: any = {
+                title: 'Invalid Contract Read Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid contract read input',
+                label: 'Invalid Read',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Read Balance',
+                        chainId: 1,
+                        txData: {
+                            address:
+                                '0x1234567890123456789012345678901234567890',
+                            abi: 'balanceOf(address)',
+                            parameters: [
+                                {
+                                    type: 'contract-read',
+                                    // Missing address
+                                    abi: 'getUser(address)',
+                                    parameters: [
+                                        {
+                                            type: 'text',
+                                            scope: 'GLOBAL',
+                                            label: 'WALLET_ADDRESS',
+                                        },
+                                    ],
+                                    returnValueIndex: 'not a number', // Invalid type
+                                },
+                            ],
+                        },
+                        success: { message: 'Success' },
+                        error: { message: 'Error' },
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidContractReadAction);
+            expect(result.valid).toBe(false);
+            expect(result.errors).toContain(
+                "/links/0/txData/parameters/0 must have required property 'address'"
+            );
+            expect(result.errors).toContain(
+                '/links/0/txData/parameters/0/returnValueIndex must be number'
+            );
+        });
+
+        test('should invalidate an action with invalid computed input', () => {
+            const invalidComputedInputAction: any = {
+                title: 'Invalid Computed Input Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid computed input',
+                label: 'Invalid Compute',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Send Tokens',
+                        chainId: 1,
+                        txData: {
+                            address:
+                                '0x1234567890123456789012345678901234567890',
+                            abi: 'transfer(address,uint256)',
+                            parameters: [
+                                {
+                                    type: 'text',
+                                    scope: 'USER',
+                                    label: 'Recipient Address',
+                                },
+                                {
+                                    type: 'computed',
+                                    operation: 'invalid_operation', // Invalid operation
+                                    values: [
+                                        {
+                                            type: 'number',
+                                            scope: 'USER',
+                                            label: 'Amount',
+                                        },
+                                        {
+                                            type: 'constant',
+                                            value: '1e18',
+                                        },
+                                    ],
+                                },
+                            ],
+                        },
+                        success: { message: 'Success' },
+                        error: { message: 'Error' },
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidComputedInputAction);
+            expect(result.valid).toBe(false);
+            expect(result.errors).toContain(
+                '/links/0/txData/parameters/1/operation must be equal to one of the allowed values'
+            );
+            console.log(result.errors);
+        });
+
+        test('should invalidate a tx-multi action with invalid combined display mode', () => {
+            const invalidTxMultiAction: any = {
+                title: 'Invalid Multi-Transaction Action',
+                icon: 'icon-url',
+                description:
+                    'This action has an invalid tx-multi link with combined display',
+                label: 'Invalid Multi-Tx Combined',
+                links: [
+                    {
+                        type: 'tx-multi',
+                        label: 'Perform Multiple Transactions',
+                        chainId: 1,
+                        txData: [
+                            {
+                                address:
+                                    '0x1234567890123456789012345678901234567890',
+                                abi: 'approve(address,uint256)',
+                                parameters: [
+                                    {
+                                        type: 'constant',
+                                        value: '0x9876543210987654321098765432109876543210',
+                                    },
+                                    {
+                                        type: 'number',
+                                        scope: 'USER',
+                                        label: 'Approval Amount',
+                                    },
+                                ],
+                            },
+                        ],
+                        displayConfig: {
+                            displayMode: 'invalid-type', // Invalid type
+                            renderedTxIndex: 1,
+                        },
+                        success: { message: 'Success' },
+                        error: { message: 'Error' },
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidTxMultiAction);
+            expect(result.valid).toBe(false);
+            expect(result.errors).toContain(
+                '/links/0/displayConfig/displayMode must be equal to one of the allowed values'
+            );
         });
     });
 });

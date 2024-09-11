@@ -20,6 +20,14 @@ export interface Action {
 }
 
 /**
+ * Constant parameter for an Action
+ */
+export interface ConstantParameter {
+    type: 'constant';
+    value: string | number | boolean | string[] | number[] | boolean[];
+}
+
+/**
  * Input field for an Action
  */
 export interface ActionInput {
@@ -33,8 +41,8 @@ export interface ActionInput {
 /**
  * Selectable input field for an Action
  */
-export interface ActionInputSelectable extends ActionInput {
-    scope: InputScope.User;
+export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
+    scope: Extract<InputScope, 'USER'>;
     options: Array<{
         label: string;
         value: string;
@@ -43,12 +51,18 @@ export interface ActionInputSelectable extends ActionInput {
 }
 
 /**
+ * Reused parameter for an tx-multi Action
+ */
+export interface ReusedParameter {
+    type: 'reused';
+    sourceTxIndex: number;
+    sourceParamIndex: number;
+}
+
+/**
  * Input scope for an Action
  */
-export enum InputScope {
-    User,
-    Global,
-}
+export type InputScope = 'USER' | 'GLOBAL';
 
 /**
  * Supported input types for Action
@@ -65,6 +79,28 @@ export type ActionInputType =
     | 'textarea'
     | 'select'
     | 'address';
+
+/**
+ * Base interface for all derrived inputs
+ * Derrived inputs are inputs that are calculated based on other inputs
+ */
+export interface ComputedInput {
+    type: 'computed';
+    operation: 'add' | 'multiply';
+    values: TypedActionParameter[];
+}
+
+/**
+ * Base interface for all contract read inputs
+ * This input type is used to read data from a smart contract
+ */
+export interface ContractReadInput {
+    type: 'contract-read';
+    address: string;
+    abi: string;
+    parameters: TypedActionParameter[];
+    returnValueIndex?: number;
+}
 
 /**
  * Linked action types
@@ -130,7 +166,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: TypedActionParameter[];
+        parameters: (TypedActionParameter | ReusedParameter)[];
         value?: string;
     }>;
     success: {
@@ -140,6 +176,10 @@ export interface TxMultiAction extends LinkedActionBase {
     error: {
         message: string;
     };
+    displayConfig: {
+        displayMode: 'combined' | 'sequential';
+        renderedTxIndex?: number; // Only used when displayMode is 'combined'
+    };
 }
 
 /**
@@ -147,6 +187,7 @@ export interface TxMultiAction extends LinkedActionBase {
  */
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
+    address: TypedActionParameter;
     value: string;
 }
 
@@ -163,8 +204,12 @@ export type LinkedAction =
 /**
  * Helper type for resolving parameters to their respective types
  */
-export type TypedActionParameter = ActionInput | ActionInputSelectable;
-
+export type TypedActionParameter =
+    | ConstantParameter
+    | ActionInput
+    | ActionInputSelectable
+    | ComputedInput
+    | ContractReadInput;
 /**
  * Error message that can be returned from an Action
  */

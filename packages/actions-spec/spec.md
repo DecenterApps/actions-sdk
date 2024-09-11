@@ -41,7 +41,7 @@ export interface Action {
 -   `description`: A short description providing context for the action.
 -   `label`: A user-facing label for the action button or UI element.
 -   `links`: An optional array of linked actions that can be performed, defined by the `LinkedAction` interface.
--   `error`: An optional `ActionError `object that provides an error message to the user if something goes wrong during the action execution.
+-   `error`: An optional `ActionError` object that provides an error message to the user if something goes wrong during the action execution.
 
 ## Linked Actions
 
@@ -124,10 +124,13 @@ export interface TxAction extends LinkedActionBase {
     -   `txData`: An array of transaction details, each including:
         -   `address`: The contract address for the transaction.
         -   `abi`: The ABI (Application Binary Interface) of the contract.
-        -   `parameters`: The parameters required for the transaction, defined as `TypedActionParameter[]`.
+        -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReusedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
     -   `success`: Defines the message to display upon successful execution of all transactions and an optional CID for the next action.
     -   `error`: Defines the message to display in case of an error.
+    -   `displayConfig`: Configures how the multi-transaction action should be displayed to the user.
+        -   `displayMode`: Can be either 'combined' or 'sequential', determining whether transactions should be shown as a single action or as separate steps.
+        -   `renderedTxIndex` (optional): Used only when `displayMode` is 'combined', specifies which transaction's details should be rendered as the representative for the entire multi-transaction action.
 
 ```ts
 export interface TxMultiAction extends LinkedActionBase {
@@ -136,7 +139,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: TypedActionParameter[];
+        parameters: (TypedActionParameter | ReusedParameter)[];
         value?: string;
     }>;
     success: {
@@ -145,6 +148,10 @@ export interface TxMultiAction extends LinkedActionBase {
     };
     error: {
         message: string;
+    };
+    displayConfig: {
+        displayMode: 'combined' | 'sequential';
+        renderedTxIndex?: number;
     };
 }
 ```
@@ -155,11 +162,13 @@ export interface TxMultiAction extends LinkedActionBase {
 -   **Description**: Represents a native currency transfer action. This type is used to specify a transfer of value from one address to another.
 
 -   **Fields**:
+    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter`.
     -   `value`: The amount to be transferred.
 
 ```ts
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
+    address: TypedActionParameter;
     value: string;
 }
 ```
@@ -258,13 +267,15 @@ Clients must respect these scopes when processing inputs:
 
 ## Typed Action Parameters
 
-Typed action parameters are used to specify the nature and origin of data used in actions. They can be one of three types:
+Typed action parameters are used to specify the nature and origin of data used in actions. They can be one of five types:
 
 ```ts
 export type TypedActionParameter =
     | ConstantParameter
     | ActionInput
-    | ActionInputSelectable;
+    | ActionInputSelectable
+    | ComputedInput
+    | ContractReadInput;
 ```
 
 ### Constant Parameter
@@ -274,15 +285,62 @@ Constant parameters represent fixed values that don't require user input:
 ```ts
 export interface ConstantParameter {
     type: 'constant';
-    value: string | number | boolean;
+    value: string | number | boolean | string[] | number[] | boolean[];
 }
 ```
 
-Clients should use the provided `value` directly without any user interaction.
+Clients should use the provided `value` directly without any user interaction. Note that the `value` can now be a single value or an array of values of the same type.
 
 ### Action Input and Action Input Selectable
 
 These types correspond to the `ActionInput` and `ActionInputSelectable` interfaces described earlier. Clients should handle these based on their respective specifications.
+
+### Computed Input
+
+Computed inputs are derived from other inputs through simple arithmetic operations:
+
+```ts
+export interface ComputedInput {
+    type: 'computed';
+    operation: 'add' | 'multiply';
+    values: TypedActionParameter[];
+}
+```
+
+Clients should calculate the result based on the specified operation and the provided values. The `values` array can contain any type of `TypedActionParameter`, allowing for complex computations.
+
+-   For 'add' operation, sum all the values.
+-   For 'multiply' operation, multiply all the values together.
+
+### Contract Read Input
+
+Contract read inputs are used to fetch data from a smart contract:
+
+```ts
+export interface ContractReadInput {
+    type: 'contract-read';
+    address: string;
+    abi: string;
+    parameters: TypedActionParameter[];
+    returnValueIndex?: number;
+}
+```
+
+Clients should use this to read data from a smart contract without modifying its state. The `parameters` array specifies the arguments for the contract call, and `returnValueIndex` (if provided) indicates which return value to use if the contract method returns multiple values.
+
+### Reused Parameter
+
+Reused parameters are specifically for `tx-multi` actions, allowing parameters from one transaction to be reused in subsequent transactions:
+
+```ts
+export interface ReusedParameter {
+    type: 'reused';
+    sourceTxIndex: number;
+    sourceParamIndex: number;
+}
+```
+
+Clients should interpret this as a reference to a parameter used in a previous transaction within the same `tx-multi` action. The `sourceTxIndex` specifies which transaction to look at, and `sourceParamIndex` indicates which parameter from that transaction to reuse.
 
 ## Action Errors
 

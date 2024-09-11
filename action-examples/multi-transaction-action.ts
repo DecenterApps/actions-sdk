@@ -5,6 +5,8 @@ import {
     InputScope,
     TxMultiAction,
     ConstantParameter,
+    chainId,
+    globalInputs,
 } from 'actions-sdk';
 
 const error: ActionError = {
@@ -15,7 +17,7 @@ const links: LinkedAction[] = [
     {
         type: 'tx-multi',
         label: 'Swap Tokens',
-        chainId: 1,
+        chainId: chainId.ETHEREUM_MAINNET,
         txData: [
             {
                 address: '0xTOKEN_ADDRESS', // Address of the token to be swapped
@@ -55,12 +57,12 @@ const links: LinkedAction[] = [
                     {
                         type: 'text',
                         scope: 'GLOBAL',
-                        label: 'WALLET_ADDRESS',
+                        label: globalInputs.WALLET_ADDRESS,
                         required: true,
                     },
                     {
                         type: 'constant',
-                        value: 'VALID_TIMESTAMP',
+                        value: globalInputs.UNIX_TIMESTAMP,
                     },
                 ],
             },

@@ -24,7 +24,7 @@ export interface Action {
  */
 export interface ConstantParameter {
     type: 'constant';
-    value: string | number | boolean;
+    value: string | number | boolean | string[] | number[] | boolean[];
 }
 
 /**

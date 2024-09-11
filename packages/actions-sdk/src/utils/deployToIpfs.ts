@@ -6,7 +6,7 @@ import { validateAction } from '../validation/validate';
 /*
  * PinataCredentials type for API Key and Secret Key
  */
-type PinataCredentials = {
+export type PinataCredentials = {
     apiKey: string;
     apiSecretKey: string;
 };

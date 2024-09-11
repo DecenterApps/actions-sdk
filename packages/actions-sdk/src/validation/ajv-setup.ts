@@ -4,6 +4,8 @@ import {
     constantParameterSchema,
     actionInputSchema,
     actionInputSelectableSchema,
+    computedInputSchema,
+    contractReadInputSchema,
     typedActionParameterSchema,
     txActionSchema,
     txMultiActionSchema,
@@ -32,12 +34,15 @@ ajv.addSchema(
     actionInputSelectableSchema,
     '#/definitions/actionInputSelectable'
 );
+ajv.addSchema(computedInputSchema, '#/definitions/computedInput');
+ajv.addSchema(contractReadInputSchema, '#/definitions/contractReadInput');
 ajv.addSchema(typedActionParameterSchema, '#/definitions/typedActionParameter');
 ajv.addSchema(txActionSchema, '#/definitions/txAction');
 ajv.addSchema(txMultiActionSchema, '#/definitions/txMultiAction');
 ajv.addSchema(transferActionSchema, '#/definitions/transferAction');
 ajv.addSchema(linkActionSchema, '#/definitions/linkAction');
 ajv.addSchema(actionReferenceSchema, '#/definitions/actionReference');
+ajv.addSchema(linkedActionSchema, '#/definitions/linkedAction');
 ajv.addSchema(actionSchema, '#/definitions/action');
 
 export default ajv;

@@ -4,6 +4,9 @@ import {
     ConstantParameter,
     ActionInput,
     ActionInputSelectable,
+    ReusedParameter,
+    ComputedInput,
+    ContractReadInput,
     TypedActionParameter,
     LinkAction,
     ActionReference,
@@ -33,7 +36,16 @@ export const constantParameterSchema: JSONSchemaType<ConstantParameter> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'constant' },
-        value: { type: 'string' },
+        value: {
+            oneOf: [
+                { type: 'string' },
+                { type: 'number' },
+                { type: 'boolean' },
+                { type: 'array', items: { type: 'string' } },
+                { type: 'array', items: { type: 'number' } },
+                { type: 'array', items: { type: 'boolean' } },
+            ],
+        },
     },
     required: ['type', 'value'],
     additionalProperties: false,
@@ -57,6 +69,8 @@ export const actionInputSchema: JSONSchemaType<ActionInput> = {
                 'checkbox',
                 'radio',
                 'textarea',
+                'select',
+                'address',
             ],
         },
         scope: { type: 'string', enum: ['USER', 'GLOBAL'] },
@@ -76,7 +90,7 @@ export const actionInputSelectableSchema: JSONSchemaType<ActionInputSelectable> 
         type: 'object',
         properties: {
             type: { type: 'string', const: 'select' },
-            scope: { type: 'string', enum: ['USER'] },
+            scope: { type: 'string', const: 'USER' },
             label: { type: 'string' },
             options: {
                 type: 'array',
@@ -99,18 +113,75 @@ export const actionInputSelectableSchema: JSONSchemaType<ActionInputSelectable> 
     };
 
 /**
- * Represents the JSON schema for TypedActionParamete object.
+ * Represents the JSON schema for ReusedParameter object.
+ */
+export const reusedParameterSchema: JSONSchemaType<ReusedParameter> = {
+    type: 'object',
+    properties: {
+        type: { type: 'string', const: 'reused' },
+        sourceTxIndex: { type: 'number' },
+        sourceParamIndex: { type: 'number' },
+    },
+    required: ['type', 'sourceTxIndex', 'sourceParamIndex'],
+    additionalProperties: false,
+};
+
+/**
+ * Represents the helper schema for action parameters.
+ */
+const baseParameterSchema = {
+    type: 'object',
+    oneOf: [
+        { $ref: '#/definitions/constantParameter' },
+        { $ref: '#/definitions/actionInput' },
+        { $ref: '#/definitions/actionInputSelectable' },
+        { $ref: '#/definitions/computedInput' },
+        { $ref: '#/definitions/contractReadInput' },
+    ],
+    required: ['type'],
+} as const;
+
+/**
+ * Represents the JSON schema for ComputedInput object.
+ */
+export const computedInputSchema: JSONSchemaType<ComputedInput> = {
+    type: 'object',
+    properties: {
+        type: { type: 'string', const: 'computed' },
+        operation: { type: 'string', enum: ['add', 'multiply'] },
+        values: {
+            type: 'array',
+            items: baseParameterSchema,
+        },
+    },
+    required: ['type', 'operation', 'values'],
+    additionalProperties: false,
+};
+
+/**
+ * Represents the JSON schema for ContractReadInput object.
+ */
+export const contractReadInputSchema: JSONSchemaType<ContractReadInput> = {
+    type: 'object',
+    properties: {
+        type: { type: 'string', const: 'contract-read' },
+        address: { type: 'string' },
+        abi: { type: 'string' },
+        parameters: {
+            type: 'array',
+            items: baseParameterSchema,
+        },
+        returnValueIndex: { type: 'number', nullable: true },
+    },
+    required: ['type', 'address', 'abi', 'parameters'],
+    additionalProperties: false,
+};
+
+/**
+ * Represents the JSON schema for TypedActionParameter object.
  */
 export const typedActionParameterSchema: JSONSchemaType<TypedActionParameter> =
-    {
-        type: 'object',
-        oneOf: [
-            { $ref: '#/definitions/constantParameter' },
-            { $ref: '#/definitions/actionInput' },
-            { $ref: '#/definitions/actionInputSelectable' },
-        ],
-        required: ['type'],
-    };
+    baseParameterSchema;
 
 /**
  * Represents the JSON schema for TxAction object.
@@ -175,13 +246,30 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
                     abi: { type: 'string' },
                     parameters: {
                         type: 'array',
-                        items: typedActionParameterSchema,
+                        items: {
+                            anyOf: [
+                                typedActionParameterSchema,
+                                reusedParameterSchema,
+                            ],
+                        },
                     },
                     value: { type: 'string', nullable: true },
                 },
                 required: ['address', 'abi', 'parameters'],
                 additionalProperties: false,
             },
+        },
+        displayConfig: {
+            type: 'object',
+            properties: {
+                displayMode: {
+                    type: 'string',
+                    enum: ['combined', 'sequential'],
+                },
+                renderedTxIndex: { type: 'integer', nullable: true },
+            },
+            required: ['displayMode'],
+            additionalProperties: false,
         },
         success: {
             type: 'object',
@@ -201,7 +289,14 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
             additionalProperties: false,
         },
     },
-    required: ['type', 'chainId', 'txData', 'success', 'error'],
+    required: [
+        'type',
+        'chainId',
+        'txData',
+        'displayConfig',
+        'success',
+        'error',
+    ],
     additionalProperties: false,
 };
 

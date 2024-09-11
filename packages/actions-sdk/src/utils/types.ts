@@ -25,6 +25,7 @@ export type {
     ConstantParameter,
     ActionInput,
     ActionInputSelectable,
+    ReusedParameter,
     InputScope,
     ActionInputType,
     LinkedActionType,

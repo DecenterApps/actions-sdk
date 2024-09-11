@@ -1,7 +1,7 @@
 {
     "private": false,
     "name": "actions-spec",
-    "version": "1.0.7",
+    "version": "1.0.9",
     "main": "index.js",
     "scripts": {
         "prepublishOnly": "npm run test-typescript",

@@ -45,6 +45,7 @@ export const chainId: ChainIdConfig = {
  */
 export const globalInputs: GlobalInputs = {
     WALLET_ADDRESS: 'WALLET_ADDRESS',
+    UNIX_TIMESTAMP: 'UNIX_TIMESTAMP',
 };
 
 /**

@@ -127,18 +127,61 @@ export const reusedParameterSchema: JSONSchemaType<ReusedParameter> = {
 };
 
 /**
+ * Represents the helper schema for action parameters.
+ */
+const baseParameterSchema = {
+    type: 'object',
+    oneOf: [
+        { $ref: '#/definitions/constantParameter' },
+        { $ref: '#/definitions/actionInput' },
+        { $ref: '#/definitions/actionInputSelectable' },
+        { $ref: '#/definitions/computedInput' },
+        { $ref: '#/definitions/contractReadInput' },
+    ],
+    required: ['type'],
+} as const;
+
+/**
+ * Represents the JSON schema for ComputedInput object.
+ */
+export const computedInputSchema: JSONSchemaType<ComputedInput> = {
+    type: 'object',
+    properties: {
+        type: { type: 'string', const: 'computed' },
+        operation: { type: 'string', enum: ['add', 'multiply'] },
+        values: {
+            type: 'array',
+            items: baseParameterSchema,
+        },
+    },
+    required: ['type', 'operation', 'values'],
+    additionalProperties: false,
+};
+
+/**
+ * Represents the JSON schema for ContractReadInput object.
+ */
+export const contractReadInputSchema: JSONSchemaType<ContractReadInput> = {
+    type: 'object',
+    properties: {
+        type: { type: 'string', const: 'contract-read' },
+        address: { type: 'string' },
+        abi: { type: 'string' },
+        parameters: {
+            type: 'array',
+            items: baseParameterSchema,
+        },
+        returnValueIndex: { type: 'number', nullable: true },
+    },
+    required: ['type', 'address', 'abi', 'parameters'],
+    additionalProperties: false,
+};
+
+/**
  * Represents the JSON schema for TypedActionParameter object.
  */
 export const typedActionParameterSchema: JSONSchemaType<TypedActionParameter> =
-    {
-        type: 'object',
-        oneOf: [
-            { $ref: '#/definitions/constantParameter' },
-            { $ref: '#/definitions/actionInput' },
-            { $ref: '#/definitions/actionInputSelectable' },
-        ],
-        required: ['type'],
-    };
+    baseParameterSchema;
 
 /**
  * Represents the JSON schema for TxAction object.

@@ -75,7 +75,7 @@ const links: LinkedAction[] = [
         },
         displayConfig: {
             displayMode: 'combined',
-            primaryActionIndex: 1,
+            renderedTxIndex: 1,
         },
     },
     {

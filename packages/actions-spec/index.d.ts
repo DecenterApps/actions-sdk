@@ -81,6 +81,28 @@ export type ActionInputType =
     | 'address';
 
 /**
+ * Base interface for all derrived inputs
+ * Derrived inputs are inputs that are calculated based on other inputs
+ */
+export interface ComputedInput {
+    type: 'computed';
+    operation: 'add' | 'multiply';
+    values: TypedActionParameter[];
+}
+
+/**
+ * Base interface for all contract read inputs
+ * This input type is used to read data from a smart contract
+ */
+export interface ContractReadInput {
+    type: 'contract-read';
+    address: string;
+    abi: string;
+    parameters: TypedActionParameter[];
+    returnValueIndex?: number;
+}
+
+/**
  * Linked action types
  */
 export type LinkedActionType =
@@ -185,8 +207,9 @@ export type LinkedAction =
 export type TypedActionParameter =
     | ConstantParameter
     | ActionInput
-    | ActionInputSelectable;
-
+    | ActionInputSelectable
+    | ComputedInput
+    | ContractReadInput;
 /**
  * Error message that can be returned from an Action
  */

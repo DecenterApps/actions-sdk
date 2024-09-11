@@ -99,6 +99,7 @@ export interface ContractReadInput {
     address: string;
     abi: string;
     parameters: TypedActionParameter[];
+    returnValueIndex?: number;
 }
 
 /**

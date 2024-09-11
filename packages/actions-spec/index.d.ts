@@ -84,7 +84,7 @@ export type ActionInputType =
  * Base interface for all derrived inputs
  * Derrived inputs are inputs that are calculated based on other inputs
  */
-export interface DerivedInput {
+export interface ComputedInput {
     type: 'derived';
     operation: 'add' | 'multiply' | 'subtract' | 'divide';
     values: TypedActionParameter[];
@@ -203,7 +203,7 @@ export type TypedActionParameter =
     | ConstantParameter
     | ActionInput
     | ActionInputSelectable
-    | DerivedInput
+    | ComputedInput
     | ContractReadInput;
 /**
  * Error message that can be returned from an Action

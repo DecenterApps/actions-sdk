@@ -85,7 +85,7 @@ const links: LinkedAction[] = [
     },
 ];
 
-export const multiTxAction: Action = {
+export const multiTransactionAction: Action = {
     title: 'Token Swap',
     icon: 'https://example.com/swap-icon.png',
     description: 'Swap your tokens easily and efficiently',

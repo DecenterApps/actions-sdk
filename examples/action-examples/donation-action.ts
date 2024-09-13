@@ -122,7 +122,7 @@ const links: LinkedAction[] = [
     },
 ];
 
-const action: Action = {
+export const donateAction: Action = {
     title: 'Donation Blink',
     icon: 'https://media.istockphoto.com/id/1353332258/photo/donation-concept-the-volunteer-giving-a-donate-box-to-the-recipient-standing-against-the-wall.jpg?s=612x612&w=0&k=20&c=9AL8Uj9TTtrbHpM78kMp9fqjT_8EqpEekjdixeKUzDw=',
     description: 'Donate to the cause',

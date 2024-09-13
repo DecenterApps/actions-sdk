@@ -21,7 +21,7 @@ const links: LinkedAction[] = [
     },
 ];
 
-const action: Action = {
+export const transferAction: Action = {
     title: 'Support ',
     icon: 'https://coincentral.com/wp-content/uploads/2017/08/ethereum-800x450.png',
     description:

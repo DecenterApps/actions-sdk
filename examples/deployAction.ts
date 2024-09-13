@@ -1,5 +1,3 @@
-// examples/deployAction.ts
-
 import { validateAction, deployToIpfs } from 'actions-sdk';
 import { donationAction } from './action-examples/donation-action';
 

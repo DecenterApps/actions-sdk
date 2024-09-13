@@ -40,6 +40,14 @@ npm run deploy-action
 
 This script will validate the action and then deploy it to IPFS using Pinata.
 
+## Understanding the Deployment Process
+
+1. **Validation (Optional)**:
+   The script first calls `validateAction` separately. This step is optional and included for demonstration purposes, as `validateAction` is already part of the `deployToIpfs` function.
+
+2. **Deployment**:
+   The `deployToIpfs` function is called to deploy the action to IPFS. This function includes validation step.
+
 ## Customizing the Action
 
 By default, the script deploys the `donationAction` from `./action-examples/donation-action.ts`. To deploy a different action:

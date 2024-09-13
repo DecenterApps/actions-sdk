@@ -5,6 +5,7 @@ async function deployAction() {
     console.log('\n🚀 Starting action deployment process...\n');
 
     // Step 1: Validate the action
+    // NOTE: This is optional, validateAction is already part of deployToIpfs
     console.log('🔍 Validating action...');
     const { valid, errors } = validateAction(donationAction);
 

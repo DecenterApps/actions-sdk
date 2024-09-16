@@ -56,7 +56,7 @@ export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
  * Referenced parameter for an tx-multi Action
  */
 export interface ReferencedParameter {
-    type: 'reused';
+    type: 'referenced';
     id: string;
 }
 

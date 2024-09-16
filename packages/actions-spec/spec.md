@@ -124,7 +124,7 @@ export interface TxAction extends LinkedActionBase {
     -   `txData`: An array of transaction details, each including:
         -   `address`: The contract address for the transaction.
         -   `abi`: The ABI (Application Binary Interface) of the contract.
-        -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReusedParameter)[]`.
+        -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
     -   `success`: Defines the message to display upon successful execution of all transactions and an optional CID for the next action.
     -   `error`: Defines the message to display in case of an error.
@@ -139,7 +139,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReusedParameter)[];
+        parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     }>;
     success: {
@@ -189,6 +189,7 @@ Action inputs are represented by the `ActionInput` interface, which includes sev
 ```ts
 export interface ActionInput {
     type: ActionInputType;
+    id: string;
     scope: InputScope;
     label: string;
     required?: boolean;
@@ -199,6 +200,7 @@ export interface ActionInput {
 #### Fields Description
 
 -   `type`: Specifies the type of input field (see [Input Types](#input-types)).
+-   `id`: A unique identifier for the input.
 -   `scope`: Defines where the input originates (see [Input Scopes](#input-scopes)).
 -   `label`: A user-friendly label for the input field.
 -   `required`: An optional boolean indicating whether the input is mandatory.
@@ -328,19 +330,18 @@ export interface ContractReadInput {
 
 Clients should use this to read data from a smart contract without modifying its state. The `parameters` array specifies the arguments for the contract call, and `returnValueIndex` (if provided) indicates which return value to use if the contract method returns multiple values.
 
-### Reused Parameter
+### Referenced Parameter
 
-Reused parameters are specifically for `tx-multi` actions, allowing parameters from one transaction to be reused in subsequent transactions:
+Referenced parameters are specifically used within tx-multi actions, allowing parameters from one transaction to be reused in subsequent transactions by referencing the id of the original parameter.
 
 ```ts
-export interface ReusedParameter {
+export interface ReferencedParameter {
     type: 'reused';
-    sourceTxIndex: number;
-    sourceParamIndex: number;
+    referencedId: string;
 }
 ```
 
-Clients should interpret this as a reference to a parameter used in a previous transaction within the same `tx-multi` action. The `sourceTxIndex` specifies which transaction to look at, and `sourceParamIndex` indicates which parameter from that transaction to reuse.
+Clients should interpret this as a reference to an existing parameter within the same action. The `referencedId` specifies the unique identifier of the parameter to be reused. When processing tx-multi actions, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
 
 ## Action Errors
 

@@ -89,7 +89,7 @@ export interface ActionReference extends LinkedActionBase {
     -   `txData`: Contains details about the transaction, including:
         -   `address`: The contract address for the transaction.
         -   `abi`: The ABI (Application Binary Interface) of the contract.
-        -   `parameters`: The parameters required for the transaction, defined as `TypedActionParameter[]`.
+        -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
     -   `success`: Defines the message to display upon successful transaction execution and an optional CID for the next action.
     -   `error`: Defines the message to display in case of an error.
@@ -101,7 +101,7 @@ export interface TxAction extends LinkedActionBase {
     txData: {
         address: string;
         abi: string;
-        parameters: TypedActionParameter[];
+        parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     };
     success: {
@@ -287,11 +287,12 @@ Constant parameters represent fixed values that don't require user input:
 ```ts
 export interface ConstantParameter {
     type: 'constant';
+    id: string;
     value: string | number | boolean | string[] | number[] | boolean[];
 }
 ```
 
-Clients should use the provided `value` directly without any user interaction. Note that the `value` can now be a single value or an array of values of the same type.
+Clients should use the provided `value` directly without any user interaction. The `id` field allows this parameter to be referenced in other parts of the action, particularly useful in `tx` and `tx-multi` actions.
 
 ### Action Input and Action Input Selectable
 
@@ -304,12 +305,13 @@ Computed inputs are derived from other inputs through simple arithmetic operatio
 ```ts
 export interface ComputedInput {
     type: 'computed';
+    id: string;
     operation: 'add' | 'multiply';
     values: TypedActionParameter[];
 }
 ```
 
-Clients should calculate the result based on the specified operation and the provided values. The `values` array can contain any type of `TypedActionParameter`, allowing for complex computations.
+Clients should calculate the result based on the specified operation and the provided values. The `values` array can contain any type of `TypedActionParameter`, allowing for complex computations. The `id` field allows this computed input to be referenced in other parts of the action.
 
 -   For 'add' operation, sum all the values.
 -   For 'multiply' operation, multiply all the values together.
@@ -321,6 +323,7 @@ Contract read inputs are used to fetch data from a smart contract:
 ```ts
 export interface ContractReadInput {
     type: 'contract-read';
+    id: string;
     address: string;
     abi: string;
     parameters: TypedActionParameter[];
@@ -328,20 +331,20 @@ export interface ContractReadInput {
 }
 ```
 
-Clients should use this to read data from a smart contract without modifying its state. The `parameters` array specifies the arguments for the contract call, and `returnValueIndex` (if provided) indicates which return value to use if the contract method returns multiple values.
+Clients should use this to read data from a smart contract without modifying its state. The `parameters` array specifies the arguments for the contract call, and `returnValueIndex` (if provided) indicates which return value to use if the contract method returns multiple values. The `id` field allows this contract read input to be referenced in other parts of the action.
 
 ### Referenced Parameter
 
-Referenced parameters are specifically used within tx-multi actions, allowing parameters from one transaction to be reused in subsequent transactions by referencing the id of the original parameter.
+Referenced parameters are specifically used within tx and tx-multi actions, allowing parameters to be reused across different parts of an action or across multiple transactions.
 
 ```ts
 export interface ReferencedParameter {
-    type: 'reused';
-    referencedId: string;
+    type: 'referenced';
+    id: string;
 }
 ```
 
-Clients should interpret this as a reference to an existing parameter within the same action. The `referencedId` specifies the unique identifier of the parameter to be reused. When processing tx-multi actions, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
+Clients should interpret this as a reference to an existing parameter within the same action. The `id` specifies the unique identifier of the parameter to be reused. When processing actions that use `ReferencedParameter`, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
 
 ## Action Errors
 

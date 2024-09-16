@@ -53,9 +53,9 @@ export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
 }
 
 /**
- * Reused parameter for an tx-multi Action
+ * Referenced parameter for an tx-multi Action
  */
-export interface ReusedParameter {
+export interface ReferencedParameter {
     type: 'reused';
     id: string;
 }
@@ -167,7 +167,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReusedParameter)[];
+        parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     }>;
     success: {

@@ -24,6 +24,7 @@ export interface Action {
  */
 export interface ConstantParameter {
     type: 'constant';
+    id: string;
     value: string | number | boolean | string[] | number[] | boolean[];
 }
 
@@ -32,6 +33,7 @@ export interface ConstantParameter {
  */
 export interface ActionInput {
     type: ActionInputType;
+    id: string;
     scope: InputScope;
     label: string;
     required?: boolean;
@@ -55,8 +57,7 @@ export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
  */
 export interface ReusedParameter {
     type: 'reused';
-    sourceTxIndex: number;
-    sourceParamIndex: number;
+    id: string;
 }
 
 /**

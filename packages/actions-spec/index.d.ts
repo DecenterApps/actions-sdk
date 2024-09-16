@@ -53,7 +53,7 @@ export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
 }
 
 /**
- * Referenced parameter for an tx-multi Action
+ * Referenced parameter for tx and tx-multi Actions
  */
 export interface ReferencedParameter {
     type: 'referenced';
@@ -82,11 +82,12 @@ export type ActionInputType =
     | 'address';
 
 /**
- * Base interface for all derrived inputs
- * Derrived inputs are inputs that are calculated based on other inputs
+ * Base interface for all derived inputs
+ * Derived inputs are inputs that are calculated based on other inputs
  */
 export interface ComputedInput {
     type: 'computed';
+    id: string;
     operation: 'add' | 'multiply';
     values: TypedActionParameter[];
 }
@@ -97,6 +98,7 @@ export interface ComputedInput {
  */
 export interface ContractReadInput {
     type: 'contract-read';
+    id: string;
     address: string;
     abi: string;
     parameters: TypedActionParameter[];
@@ -146,7 +148,7 @@ export interface TxAction extends LinkedActionBase {
     txData: {
         address: string;
         abi: string;
-        parameters: TypedActionParameter[];
+        parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     };
     success: {

@@ -114,7 +114,7 @@ export interface TxMultiAction extends LinkedActionBase {
  */
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
-    address: TypedActionParameter;
+    address: TypedActionParameter | ReferencedParameter;
     value: string;
 }
 

@@ -36,8 +36,7 @@ export interface Action {
 ### Fields Description
 
 -   `title`: A brief, user-friendly title for the action.
--   `icon`: - The value must be an absolute HTTPS URL of an icon image. The file must be an SVG, PNG, or WebP image, or the client/wallet must reject it
-    as **malformed**.
+-   `icon`: The value must be an absolute HTTPS URL of an icon image. The file must be an SVG, PNG, or WebP image, or the client/wallet must reject it as **malformed**.
 -   `description`: A short description providing context for the action.
 -   `label`: A user-facing label for the action button or UI element.
 -   `links`: An optional array of linked actions that can be performed, defined by the `LinkedAction` interface.
@@ -65,16 +64,16 @@ export interface LinkAction extends LinkedActionBase {
 }
 ```
 
-#### `action`
+#### `reference-action`
 
--   **Type**: `action`
+-   **Type**: `reference-action`
 -   **Description**: References another action by its CID (Content Identifier), allowing for the execution of a secondary action.
 -   **Fields**:
     -   `cid`: The CID of the referenced action.
 
 ```ts
-export interface ActionReference extends LinkedActionBase {
-    type: 'action';
+export interface ReferenceAction extends LinkedActionBase {
+    type: 'reference-action';
     cid: string;
 }
 ```
@@ -162,21 +161,21 @@ export interface TxMultiAction extends LinkedActionBase {
 -   **Description**: Represents a native currency transfer action. This type is used to specify a transfer of value from one address to another.
 
 -   **Fields**:
-    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter`.
+    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter` or `ReferencedParameter`.
     -   `value`: The amount to be transferred.
 
 ```ts
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
-    address: TypedActionParameter;
+    address: TypedActionParameter | ReferencedParameter;
     value: string;
 }
 ```
 
 Clients must handle each linked action type according to its defined purpose:
 
--   For `tx`, `tx-multi` and `transfer` types, clients should prepare and execute the blockchain transactions as specified.
--   For `link` and `action` types, clients should redirect or reference the specified URL or action CID.
+-   For `tx`, `tx-multi` and `transfer-action` types, clients should prepare and execute the blockchain transactions as specified.
+-   For `link` and `reference-action` types, clients should redirect or reference the specified URL or action CID.
 
 ## Action Inputs
 
@@ -340,11 +339,11 @@ Referenced parameters are specifically used within tx and tx-multi actions, allo
 ```ts
 export interface ReferencedParameter {
     type: 'referenced';
-    id: string;
+    refParameterId: string;
 }
 ```
 
-Clients should interpret this as a reference to an existing parameter within the same action. The `id` specifies the unique identifier of the parameter to be reused. When processing actions that use `ReferencedParameter`, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
+Clients should interpret this as a reference to an existing parameter within the same action. The `refParameterId` specifies the unique identifier of the parameter to be reused. When processing actions that use `ReferencedParameter`, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
 
 ## Action Errors
 

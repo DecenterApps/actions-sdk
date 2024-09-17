@@ -20,108 +20,14 @@ export interface Action {
 }
 
 /**
- * Constant parameter for an Action
+ * Union type for all possible linked actions
  */
-export interface ConstantParameter {
-    type: 'constant';
-    id: string;
-    value: string | number | boolean | string[] | number[] | boolean[];
-}
-
-/**
- * Input field for an Action
- */
-export interface ActionInput {
-    type: ActionInputType;
-    id: string;
-    scope: InputScope;
-    label: string;
-    required?: boolean;
-    pattern?: string;
-}
-
-/**
- * Selectable input field for an Action
- */
-export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
-    scope: Extract<InputScope, 'USER'>;
-    options: Array<{
-        label: string;
-        value: string;
-        selected?: boolean;
-    }>;
-}
-
-/**
- * Referenced parameter for tx and tx-multi Actions
- */
-export interface ReferencedParameter {
-    type: 'referenced';
-    id: string;
-}
-
-/**
- * Input scope for an Action
- */
-export type InputScope = 'USER' | 'GLOBAL';
-
-/**
- * Supported input types for Action
- */
-export type ActionInputType =
-    | 'text'
-    | 'email'
-    | 'url'
-    | 'number'
-    | 'date'
-    | 'datetime-local'
-    | 'checkbox'
-    | 'radio'
-    | 'textarea'
-    | 'select'
-    | 'address';
-
-/**
- * Base interface for all derived inputs
- * Derived inputs are inputs that are calculated based on other inputs
- */
-export interface ComputedInput {
-    type: 'computed';
-    id: string;
-    operation: 'add' | 'multiply';
-    values: TypedActionParameter[];
-}
-
-/**
- * Base interface for all contract read inputs
- * This input type is used to read data from a smart contract
- */
-export interface ContractReadInput {
-    type: 'contract-read';
-    id: string;
-    address: string;
-    abi: string;
-    parameters: TypedActionParameter[];
-    returnValueIndex?: number;
-}
-
-/**
- * Linked action types
- */
-export type LinkedActionType =
-    | 'link'
-    | 'action'
-    | 'tx'
-    | 'tx-multi'
-    | 'transfer-action';
-
-/**
- * Base interface for all linked actions
- */
-export interface LinkedActionBase {
-    type: LinkedActionType;
-    label: string;
-}
+export type LinkedAction =
+    | LinkAction
+    | ActionReference
+    | TxAction
+    | TxMultiAction
+    | TransferAction;
 
 /**
  * Link type linked action
@@ -195,14 +101,22 @@ export interface TransferAction extends LinkedActionBase {
 }
 
 /**
- * Union type for all possible linked actions
+ * Base interface for all linked actions
  */
-export type LinkedAction =
-    | LinkAction
-    | ActionReference
-    | TxAction
-    | TxMultiAction
-    | TransferAction;
+export interface LinkedActionBase {
+    type: LinkedActionType;
+    label: string;
+}
+
+/**
+ * Linked action types
+ */
+export type LinkedActionType =
+    | 'link'
+    | 'action'
+    | 'tx'
+    | 'tx-multi'
+    | 'transfer-action';
 
 /**
  * Helper type for resolving parameters to their respective types
@@ -213,6 +127,93 @@ export type TypedActionParameter =
     | ActionInputSelectable
     | ComputedInput
     | ContractReadInput;
+
+/**
+ * Constant parameter for an Action
+ */
+export interface ConstantParameter {
+    type: 'constant';
+    id: string;
+    value: string | number | boolean | string[] | number[] | boolean[];
+}
+
+/**
+ * Input field for an Action
+ */
+export interface ActionInput {
+    type: ActionInputType;
+    id: string;
+    scope: InputScope;
+    label: string;
+    required?: boolean;
+    pattern?: string;
+}
+
+/**
+ * Selectable input field for an Action
+ */
+export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
+    scope: Extract<InputScope, 'USER'>;
+    options: Array<{
+        label: string;
+        value: string;
+        selected?: boolean;
+    }>;
+}
+
+/**
+ * Base interface for all derived inputs
+ * Derived inputs are inputs that are calculated based on other inputs
+ */
+export interface ComputedInput {
+    type: 'computed';
+    id: string;
+    operation: 'add' | 'multiply';
+    values: TypedActionParameter[];
+}
+
+/**
+ * Base interface for all contract read inputs
+ * This input type is used to read data from a smart contract
+ */
+export interface ContractReadInput {
+    type: 'contract-read';
+    id: string;
+    address: string;
+    abi: string;
+    parameters: TypedActionParameter[];
+    returnValueIndex?: number;
+}
+
+/**
+ * Referenced parameter for tx and tx-multi Actions
+ */
+export interface ReferencedParameter {
+    type: 'referenced';
+    id: string;
+}
+
+/**
+ * Input scope for an Action
+ */
+export type InputScope = 'USER' | 'GLOBAL';
+
+/**
+ * Supported input types for Action
+ */
+export type ActionInputType =
+    | 'text'
+    | 'email'
+    | 'url'
+    | 'number'
+    | 'date'
+    | 'datetime-local'
+    | 'checkbox'
+    | 'radio'
+    | 'textarea'
+    | 'select'
+    | 'address';
+
 /**
  * Error message that can be returned from an Action
  */

@@ -24,6 +24,7 @@ export interface Action {
  */
 export interface ConstantParameter {
     type: 'constant';
+    id: string;
     value: string | number | boolean | string[] | number[] | boolean[];
 }
 
@@ -32,6 +33,7 @@ export interface ConstantParameter {
  */
 export interface ActionInput {
     type: ActionInputType;
+    id: string;
     scope: InputScope;
     label: string;
     required?: boolean;
@@ -51,12 +53,11 @@ export interface ActionInputSelectable extends Omit<ActionInput, 'scope'> {
 }
 
 /**
- * Reused parameter for an tx-multi Action
+ * Referenced parameter for tx and tx-multi Actions
  */
-export interface ReusedParameter {
-    type: 'reused';
-    sourceTxIndex: number;
-    sourceParamIndex: number;
+export interface ReferencedParameter {
+    type: 'referenced';
+    id: string;
 }
 
 /**
@@ -81,11 +82,12 @@ export type ActionInputType =
     | 'address';
 
 /**
- * Base interface for all derrived inputs
- * Derrived inputs are inputs that are calculated based on other inputs
+ * Base interface for all derived inputs
+ * Derived inputs are inputs that are calculated based on other inputs
  */
 export interface ComputedInput {
     type: 'computed';
+    id: string;
     operation: 'add' | 'multiply';
     values: TypedActionParameter[];
 }
@@ -96,6 +98,7 @@ export interface ComputedInput {
  */
 export interface ContractReadInput {
     type: 'contract-read';
+    id: string;
     address: string;
     abi: string;
     parameters: TypedActionParameter[];
@@ -145,7 +148,7 @@ export interface TxAction extends LinkedActionBase {
     txData: {
         address: string;
         abi: string;
-        parameters: TypedActionParameter[];
+        parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     };
     success: {
@@ -166,7 +169,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReusedParameter)[];
+        parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     }>;
     success: {

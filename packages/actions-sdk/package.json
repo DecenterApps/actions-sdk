@@ -1,6 +1,6 @@
 {
     "name": "actions-sdk",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "A JavaScript SDK for deploying and validating decentralized actions using IPFS and Pinata.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
     "license": "MIT",
     "dependencies": {
         "@pinata/sdk": "^2.1.0",
-        "actions-spec": "^1.1.0",
+        "actions-spec": "^1.1.1",
         "ajv": "^8.17.1",
         "ajv-formats": "^3.0.1"
     },

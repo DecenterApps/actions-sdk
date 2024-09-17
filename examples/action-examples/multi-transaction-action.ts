@@ -25,10 +25,12 @@ const links: LinkedAction[] = [
                 parameters: [
                     {
                         type: 'constant',
+                        id: 'SWAP_ROUTER_ADDRESS',
                         value: '0xSWAP_ROUTER_ADDRESS', // Address of the swap router
                     },
                     {
                         type: 'number',
+                        id: 'AMOUNT_TO_SWAP',
                         scope: 'USER',
                         label: 'Amount to Swap',
                         required: true,
@@ -40,28 +42,31 @@ const links: LinkedAction[] = [
                 abi: 'swapExactTokensForTokens(uint256,uint256,address[],address,uint256)',
                 parameters: [
                     {
-                        type: 'reused',
-                        sourceTxIndex: 0,
-                        sourceParamIndex: 1,
+                        type: 'referenced',
+                        refParameterId: 'AMOUNT_TO_SWAP',
                     },
                     {
                         type: 'number',
+                        id: 'MIN_AMOUNT_TO_RECEIVE',
                         scope: 'USER',
                         label: 'Minimum Amount to Receive',
                         required: true,
                     },
                     {
                         type: 'constant',
+                        id: 'TOKEN_ADDRESSES',
                         value: ['0xTOKEN_A_ADDRESS', '0xTOKEN_B_ADDRESS'],
                     },
                     {
                         type: 'text',
+                        id: 'WALLET_ADDRESS',
                         scope: 'GLOBAL',
                         label: globalInputs.WALLET_ADDRESS,
                         required: true,
                     },
                     {
                         type: 'constant',
+                        id: 'UNIX_TIMESTAMP',
                         value: globalInputs.UNIX_TIMESTAMP,
                     },
                 ],

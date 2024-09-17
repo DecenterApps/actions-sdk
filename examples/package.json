@@ -5,11 +5,14 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "deploy-action": "ts-node examples/deployAction.ts"
+        "deploy-action": "ts-node deployAction.ts"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "actions-sdk": "^1.0.7"
+        "actions-sdk": "^1.0.8"
+    },
+    "devDependencies": {
+        "ts-node": "^10.9.2"
     }
 }

@@ -41,12 +41,19 @@ const transferAction: Action = {
             label: 'Send 0.01 ETH',
             address: {
                 type: 'constant',
+                id: 'Address',
                 value: '0x6a8cfF99b2856372bC8EaE39E2c413832E4C12e0',
             },
             value: '10000000000000000',
+            success: {
+                message: 'Transfer succeeded',
+            },
+            error: {
+                message: 'Transfer failed',
+            },
         },
         {
-            type: 'action',
+            type: 'reference-action',
             label: 'Next Content Creator ⏭️',
             cid: 'QmZ2dfagw22415fsafasf',
         },
@@ -86,23 +93,24 @@ The SDK exports the following types from the `actions-spec` package:
 
 -   `ACTIONS_PROTOCOL`
 -   `Action`
--   `ConstantParameter`
--   `ActionInput`
--   `ActionInputSelectable`
--   `ReusedParameter`
--   `InputScope`
--   `ActionInputType`
--   `ComputedInput`
--   `ContractReadInput`
--   `LinkedActionType`
+-   `LinkedAction`
 -   `LinkedActionBase`
+-   `LinkedActionType`
 -   `LinkAction`
--   `ActionReference`
+-   `ReferenceAction`
 -   `TxAction`
 -   `TxMultiAction`
 -   `TransferAction`
--   `LinkedAction`
 -   `TypedActionParameter`
+-   `ConstantParameter`
+-   `ActionInput`
+-   `ActionInputSelectable`
+-   `ComputedInput`
+-   `ContractReadInput`
+-   `ReferencedParameter`
+-   `InputScope`
+-   `ActionInputType`
+-   `ActionSuccessResponse`
 -   `ActionError`
 
 For detailed type definitions, see the [types.ts](./src/utils/types.ts) file.

@@ -17,6 +17,7 @@ The specification is composed of several key components:
     -   [Input Scopes](#input-scopes): Scopes defining where inputs originate.
     -   [Typed Action Parameters](#typed-action-parameters): Parameters for resolving input types.
 -   [Action Errors](#action-errors): Structure for handling errors in actions.
+-   [Action Success Response](#action-success-response): Structure for handling successful action responses.
 
 ## Action
 
@@ -90,8 +91,8 @@ export interface ReferenceAction extends LinkedActionBase {
         -   `abi`: The ABI (Application Binary Interface) of the contract.
         -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
-    -   `success`: Defines the message to display upon successful transaction execution and an optional CID for the next action.
-    -   `error`: Defines the message to display in case of an error.
+    -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
+    -   `error`: An `ActionError` object defining the error message.
 
 ```ts
 export interface TxAction extends LinkedActionBase {
@@ -103,13 +104,8 @@ export interface TxAction extends LinkedActionBase {
         parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     };
-    success: {
-        message: string;
-        nextActionCid?: string;
-    };
-    error: {
-        message: string;
-    };
+    success: ActionSuccessResponse;
+    error: ActionError;
 }
 ```
 
@@ -125,8 +121,8 @@ export interface TxAction extends LinkedActionBase {
         -   `abi`: The ABI (Application Binary Interface) of the contract.
         -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
-    -   `success`: Defines the message to display upon successful execution of all transactions and an optional CID for the next action.
-    -   `error`: Defines the message to display in case of an error.
+    -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
+    -   `error`: An `ActionError` object defining the error message.
     -   `displayConfig`: Configures how the multi-transaction action should be displayed to the user.
         -   `displayMode`: Can be either 'combined' or 'sequential', determining whether transactions should be shown as a single action or as separate steps.
         -   `renderedTxIndex` (optional): Used only when `displayMode` is 'combined', specifies which transaction's details should be rendered as the representative for the entire multi-transaction action.
@@ -141,13 +137,8 @@ export interface TxMultiAction extends LinkedActionBase {
         parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     }>;
-    success: {
-        message: string;
-        nextActionCid?: string;
-    };
-    error: {
-        message: string;
-    };
+    success: ActionSuccessResponse;
+    error: ActionError;
     displayConfig: {
         displayMode: 'combined' | 'sequential';
         renderedTxIndex?: number;
@@ -163,12 +154,16 @@ export interface TxMultiAction extends LinkedActionBase {
 -   **Fields**:
     -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter` or `ReferencedParameter`.
     -   `value`: The amount to be transferred.
+    -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
+    -   `error`: An `ActionError` object defining the error message.
 
 ```ts
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
     address: TypedActionParameter | ReferencedParameter;
     value: string;
+    success: ActionSuccessResponse;
+    error: ActionError;
 }
 ```
 
@@ -352,3 +347,19 @@ Clients should implement robust error handling:
 3. Log detailed error information for debugging purposes, if possible.
 
 By following these guidelines, clients can ensure a consistent and user-friendly experience when dealing with action-related errors.
+
+## Action Success Response
+
+Action success responses provide a standardized way to communicate successful execution of an action:
+
+```ts
+export interface ActionSuccessResponse {
+    message: string;
+    nextActionCid?: string;
+}
+```
+
+-   `message`: A user-friendly success message to be displayed to the user.
+-   `nextActionCid`: An optional field specifying the CID of the next action to be executed, if any.
+
+Clients should display the success message to users when an action is successfully executed. If a `nextActionCid` is provided, clients should proceed to fetch and execute the specified action.

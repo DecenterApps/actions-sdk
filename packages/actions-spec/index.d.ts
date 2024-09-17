@@ -75,13 +75,8 @@ export interface TxAction extends LinkedActionBase {
         parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     };
-    success: {
-        message: string;
-        nextActionCid?: string;
-    };
-    error: {
-        message: string;
-    };
+    success: ActionSuccessResponse;
+    error: ActionError;
 }
 
 /**
@@ -96,13 +91,8 @@ export interface TxMultiAction extends LinkedActionBase {
         parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     }>;
-    success: {
-        message: string;
-        nextActionCid?: string;
-    };
-    error: {
-        message: string;
-    };
+    success: ActionSuccessResponse;
+    error: ActionError;
     displayConfig: {
         displayMode: 'combined' | 'sequential';
         renderedTxIndex?: number; // Only used when displayMode is 'combined'
@@ -116,6 +106,8 @@ export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
     address: TypedActionParameter | ReferencedParameter;
     value: string;
+    success: ActionSuccessResponse;
+    error: ActionError;
 }
 
 /**
@@ -202,6 +194,14 @@ export type InputScope = 'USER' | 'GLOBAL';
  * Supported input types for Action
  */
 export type ActionInputType = 'text' | 'number' | 'radio' | 'select';
+
+/**
+ * Success response that can be returned from an Action
+ */
+export interface ActionSuccessResponse {
+    message: string;
+    nextActionCid?: string;
+}
 
 /**
  * Error message that can be returned from an Action

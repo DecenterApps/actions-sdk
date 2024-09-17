@@ -1,4 +1,4 @@
-import { Action, ActionError, LinkedAction, InputScope } from 'actions-sdk';
+import { Action, ActionError, LinkedAction } from 'actions-sdk';
 
 const error: ActionError = {
     message: 'Error displaying blink',
@@ -15,12 +15,14 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
+                    id: 'WALLET_ADDRESS',
                     scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
                 {
                     type: 'number',
+                    id: 'AMOUNT',
                     scope: 'USER',
                     label: 'Amount',
                     required: true,
@@ -44,12 +46,14 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
+                    id: 'WALLET_ADDRESS',
                     scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
                 {
                     type: 'constant',
+                    id: 'AMOUNT',
                     value: 10000000000000000000,
                 },
             ],
@@ -71,12 +75,14 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
+                    id: 'WALLET_ADDRESS',
                     scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
                 {
                     type: 'constant',
+                    id: 'AMOUNT',
                     value: 50000000000000000000,
                 },
             ],
@@ -98,12 +104,14 @@ const links: LinkedAction[] = [
             parameters: [
                 {
                     type: 'text',
+                    id: 'WALLET_ADDRESS',
                     scope: 'GLOBAL',
                     label: 'WALLET_ADDRESS',
                     required: true,
                 },
                 {
                     type: 'constant',
+                    id: 'AMOUNT',
                     value: 100000000000000000000,
                 },
             ],

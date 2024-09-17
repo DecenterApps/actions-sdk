@@ -190,7 +190,7 @@ export interface ContractReadInput {
  */
 export interface ReferencedParameter {
     type: 'referenced';
-    id: string;
+    refParameterId: string;
 }
 
 /**

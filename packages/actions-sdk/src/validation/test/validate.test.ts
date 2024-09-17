@@ -39,12 +39,14 @@ describe('validateAction', () => {
                         parameters: [
                             {
                                 type: 'text',
+                                id: 'WALLET_ADDRESS',
                                 scope: 'GLOBAL',
                                 label: 'WALLET_ADDRESS',
                                 required: true,
                             },
                             {
                                 type: 'number',
+                                id: 'Amount',
                                 scope: 'USER',
                                 label: 'Amount',
                                 required: true,
@@ -68,12 +70,14 @@ describe('validateAction', () => {
                         parameters: [
                             {
                                 type: 'text',
+                                id: 'WALLET_ADDRESS',
                                 scope: 'GLOBAL',
                                 label: 'WALLET_ADDRESS',
                                 required: true,
                             },
                             {
                                 type: 'constant',
+                                id: 'Value',
                                 value: '10000000000000000000',
                             },
                         ],
@@ -137,6 +141,7 @@ describe('validateAction', () => {
                                 parameters: [
                                     {
                                         type: 'constant',
+                                        id: 'Value',
                                         value: 100,
                                     },
                                 ],
@@ -146,9 +151,8 @@ describe('validateAction', () => {
                                 abi: 'function2(address)',
                                 parameters: [
                                     {
-                                        type: 'reused',
-                                        sourceTxIndex: 0,
-                                        sourceParamIndex: 0,
+                                        type: 'referenced',
+                                        refParameterId: 'WALLET_ADDRESS',
                                     },
                                 ],
                             },
@@ -183,10 +187,17 @@ describe('validateAction', () => {
                         label: 'Send ETH',
                         address: {
                             type: 'text',
+                            id: 'Receiver',
                             scope: 'USER',
                             label: 'Recipient Address',
                         },
                         value: '1000000000000000000', // 1 ETH in wei
+                        success: {
+                            message: 'Ether is sent',
+                        },
+                        error: {
+                            message: 'Sending ether failed',
+                        },
                     },
                 ],
             };
@@ -214,12 +225,14 @@ describe('validateAction', () => {
                             parameters: [
                                 {
                                     type: 'contract-read',
+                                    id: 'WALLET_ADDRESS',
                                     address:
                                         '0x9876543210987654321098765432109876543210',
                                     abi: 'getUser(address)',
                                     parameters: [
                                         {
                                             type: 'text',
+                                            id: '',
                                             scope: 'GLOBAL',
                                             label: 'WALLET_ADDRESS',
                                         },
@@ -261,20 +274,24 @@ describe('validateAction', () => {
                             parameters: [
                                 {
                                     type: 'text',
+                                    id: '',
                                     scope: 'USER',
                                     label: 'Recipient Address',
                                 },
                                 {
                                     type: 'computed',
+                                    id: '',
                                     operation: 'multiply',
                                     values: [
                                         {
                                             type: 'number',
+                                            id: '',
                                             scope: 'USER',
                                             label: 'Amount',
                                         },
                                         {
                                             type: 'constant',
+                                            id: '',
                                             value: 1e18, // Convert to wei
                                         },
                                     ],
@@ -316,10 +333,12 @@ describe('validateAction', () => {
                                 parameters: [
                                     {
                                         type: 'constant',
+                                        id: '',
                                         value: '0x9876543210987654321098765432109876543210',
                                     },
                                     {
                                         type: 'number',
+                                        id: '',
                                         scope: 'USER',
                                         label: 'Approval Amount',
                                     },
@@ -331,9 +350,8 @@ describe('validateAction', () => {
                                 abi: 'deposit(uint256)',
                                 parameters: [
                                     {
-                                        type: 'reused',
-                                        sourceTxIndex: 0,
-                                        sourceParamIndex: 1,
+                                        type: 'referenced',
+                                        refParameterId: '',
                                     },
                                 ],
                             },

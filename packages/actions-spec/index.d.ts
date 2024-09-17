@@ -1,5 +1,5 @@
 /**
- * Actions specification - v1.0
+ * Actions specification - v1.1
  */
 
 /**
@@ -24,10 +24,28 @@ export interface Action {
  */
 export type LinkedAction =
     | LinkAction
-    | ActionReference
+    | ReferenceAction
     | TxAction
     | TxMultiAction
     | TransferAction;
+
+/**
+ * Base interface for all linked actions
+ */
+export interface LinkedActionBase {
+    type: LinkedActionType;
+    label: string;
+}
+
+/**
+ * Linked action types
+ */
+export type LinkedActionType =
+    | 'link'
+    | 'reference-action'
+    | 'tx'
+    | 'tx-multi'
+    | 'transfer-action';
 
 /**
  * Link type linked action
@@ -38,10 +56,10 @@ export interface LinkAction extends LinkedActionBase {
 }
 
 /**
- * Action type linked action (referencing another action by CID)
+ * Reference type linked action (referencing another action by CID)
  */
-export interface ActionReference extends LinkedActionBase {
-    type: 'action';
+export interface ReferenceAction extends LinkedActionBase {
+    type: 'reference-action';
     cid: string;
 }
 
@@ -99,24 +117,6 @@ export interface TransferAction extends LinkedActionBase {
     address: TypedActionParameter;
     value: string;
 }
-
-/**
- * Base interface for all linked actions
- */
-export interface LinkedActionBase {
-    type: LinkedActionType;
-    label: string;
-}
-
-/**
- * Linked action types
- */
-export type LinkedActionType =
-    | 'link'
-    | 'action'
-    | 'tx'
-    | 'tx-multi'
-    | 'transfer-action';
 
 /**
  * Helper type for resolving parameters to their respective types

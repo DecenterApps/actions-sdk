@@ -227,28 +227,14 @@ This interface extends `ActionInput` but replaces the `scope` field with a more 
 The following input types are supported:
 
 ```ts
-export type ActionInputType =
-    | 'text'
-    | 'email'
-    | 'url'
-    | 'number'
-    | 'date'
-    | 'datetime-local'
-    | 'checkbox'
-    | 'radio'
-    | 'textarea'
-    | 'select'
-    | 'address';
+export type ActionInputType = 'text' | 'number' | 'radio' | 'select';
 ```
 
 Clients should render appropriate input fields based on these types. For example:
 
--   'text', 'email', 'url', 'number' should be rendered as single-line input fields with appropriate validation.
--   'date' and 'datetime-local' should be rendered as date/time pickers.
--   'checkbox' and 'radio' should be rendered as selectable options.
--   'textarea' should be rendered as a multi-line input field.
+-   'text' and 'number' should be rendered as single-line input fields with appropriate validation.
+-   'radio' should be rendered as selectable options.
 -   'select' should be rendered as a dropdown or list of options.
--   'address' should be rendered as an input field specifically for blockchain addresses, potentially with address validation.
 
 ## Input Scopes
 

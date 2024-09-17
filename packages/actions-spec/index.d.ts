@@ -1,5 +1,5 @@
 /**
- * Actions specification - v1.1
+ * Actions specification - v1.0
  */
 
 /**
@@ -201,18 +201,7 @@ export type InputScope = 'USER' | 'GLOBAL';
 /**
  * Supported input types for Action
  */
-export type ActionInputType =
-    | 'text'
-    | 'email'
-    | 'url'
-    | 'number'
-    | 'date'
-    | 'datetime-local'
-    | 'checkbox'
-    | 'radio'
-    | 'textarea'
-    | 'select'
-    | 'address';
+export type ActionInputType = 'text' | 'number' | 'radio' | 'select';
 
 /**
  * Error message that can be returned from an Action

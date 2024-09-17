@@ -17,6 +17,7 @@ The specification is composed of several key components:
     -   [Input Scopes](#input-scopes): Scopes defining where inputs originate.
     -   [Typed Action Parameters](#typed-action-parameters): Parameters for resolving input types.
 -   [Action Errors](#action-errors): Structure for handling errors in actions.
+-   [Action Success Response](#action-success-response): Structure for handling successful action responses.
 
 ## Action
 
@@ -36,8 +37,7 @@ export interface Action {
 ### Fields Description
 
 -   `title`: A brief, user-friendly title for the action.
--   `icon`: - The value must be an absolute HTTPS URL of an icon image. The file must be an SVG, PNG, or WebP image, or the client/wallet must reject it
-    as **malformed**.
+-   `icon`: The value must be an absolute HTTPS URL of an icon image. The file must be an SVG, PNG, or WebP image, or the client/wallet must reject it as **malformed**.
 -   `description`: A short description providing context for the action.
 -   `label`: A user-facing label for the action button or UI element.
 -   `links`: An optional array of linked actions that can be performed, defined by the `LinkedAction` interface.
@@ -65,16 +65,16 @@ export interface LinkAction extends LinkedActionBase {
 }
 ```
 
-#### `action`
+#### `reference-action`
 
--   **Type**: `action`
+-   **Type**: `reference-action`
 -   **Description**: References another action by its CID (Content Identifier), allowing for the execution of a secondary action.
 -   **Fields**:
     -   `cid`: The CID of the referenced action.
 
 ```ts
-export interface ActionReference extends LinkedActionBase {
-    type: 'action';
+export interface ReferenceAction extends LinkedActionBase {
+    type: 'reference-action';
     cid: string;
 }
 ```
@@ -91,8 +91,8 @@ export interface ActionReference extends LinkedActionBase {
         -   `abi`: The ABI (Application Binary Interface) of the contract.
         -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
-    -   `success`: Defines the message to display upon successful transaction execution and an optional CID for the next action.
-    -   `error`: Defines the message to display in case of an error.
+    -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
+    -   `error`: An `ActionError` object defining the error message.
 
 ```ts
 export interface TxAction extends LinkedActionBase {
@@ -104,13 +104,8 @@ export interface TxAction extends LinkedActionBase {
         parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     };
-    success: {
-        message: string;
-        nextActionCid?: string;
-    };
-    error: {
-        message: string;
-    };
+    success: ActionSuccessResponse;
+    error: ActionError;
 }
 ```
 
@@ -126,8 +121,8 @@ export interface TxAction extends LinkedActionBase {
         -   `abi`: The ABI (Application Binary Interface) of the contract.
         -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
         -   `value` (optional): The value to be sent with the transaction.
-    -   `success`: Defines the message to display upon successful execution of all transactions and an optional CID for the next action.
-    -   `error`: Defines the message to display in case of an error.
+    -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
+    -   `error`: An `ActionError` object defining the error message.
     -   `displayConfig`: Configures how the multi-transaction action should be displayed to the user.
         -   `displayMode`: Can be either 'combined' or 'sequential', determining whether transactions should be shown as a single action or as separate steps.
         -   `renderedTxIndex` (optional): Used only when `displayMode` is 'combined', specifies which transaction's details should be rendered as the representative for the entire multi-transaction action.
@@ -142,13 +137,8 @@ export interface TxMultiAction extends LinkedActionBase {
         parameters: (TypedActionParameter | ReferencedParameter)[];
         value?: string;
     }>;
-    success: {
-        message: string;
-        nextActionCid?: string;
-    };
-    error: {
-        message: string;
-    };
+    success: ActionSuccessResponse;
+    error: ActionError;
     displayConfig: {
         displayMode: 'combined' | 'sequential';
         renderedTxIndex?: number;
@@ -162,21 +152,25 @@ export interface TxMultiAction extends LinkedActionBase {
 -   **Description**: Represents a native currency transfer action. This type is used to specify a transfer of value from one address to another.
 
 -   **Fields**:
-    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter`.
+    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter` or `ReferencedParameter`.
     -   `value`: The amount to be transferred.
+    -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
+    -   `error`: An `ActionError` object defining the error message.
 
 ```ts
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
-    address: TypedActionParameter;
+    address: TypedActionParameter | ReferencedParameter;
     value: string;
+    success: ActionSuccessResponse;
+    error: ActionError;
 }
 ```
 
 Clients must handle each linked action type according to its defined purpose:
 
--   For `tx`, `tx-multi` and `transfer` types, clients should prepare and execute the blockchain transactions as specified.
--   For `link` and `action` types, clients should redirect or reference the specified URL or action CID.
+-   For `tx`, `tx-multi` and `transfer-action` types, clients should prepare and execute the blockchain transactions as specified.
+-   For `link` and `reference-action` types, clients should redirect or reference the specified URL or action CID.
 
 ## Action Inputs
 
@@ -228,28 +222,14 @@ This interface extends `ActionInput` but replaces the `scope` field with a more 
 The following input types are supported:
 
 ```ts
-export type ActionInputType =
-    | 'text'
-    | 'email'
-    | 'url'
-    | 'number'
-    | 'date'
-    | 'datetime-local'
-    | 'checkbox'
-    | 'radio'
-    | 'textarea'
-    | 'select'
-    | 'address';
+export type ActionInputType = 'text' | 'number' | 'radio' | 'select';
 ```
 
 Clients should render appropriate input fields based on these types. For example:
 
--   'text', 'email', 'url', 'number' should be rendered as single-line input fields with appropriate validation.
--   'date' and 'datetime-local' should be rendered as date/time pickers.
--   'checkbox' and 'radio' should be rendered as selectable options.
--   'textarea' should be rendered as a multi-line input field.
+-   'text' and 'number' should be rendered as single-line input fields with appropriate validation.
+-   'radio' should be rendered as selectable options.
 -   'select' should be rendered as a dropdown or list of options.
--   'address' should be rendered as an input field specifically for blockchain addresses, potentially with address validation.
 
 ## Input Scopes
 
@@ -340,11 +320,11 @@ Referenced parameters are specifically used within tx and tx-multi actions, allo
 ```ts
 export interface ReferencedParameter {
     type: 'referenced';
-    id: string;
+    refParameterId: string;
 }
 ```
 
-Clients should interpret this as a reference to an existing parameter within the same action. The `id` specifies the unique identifier of the parameter to be reused. When processing actions that use `ReferencedParameter`, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
+Clients should interpret this as a reference to an existing parameter within the same action. The `refParameterId` specifies the unique identifier of the parameter to be reused. When processing actions that use `ReferencedParameter`, clients must resolve these references by substituting the value of the referenced parameter before executing each transaction.
 
 ## Action Errors
 
@@ -367,3 +347,19 @@ Clients should implement robust error handling:
 3. Log detailed error information for debugging purposes, if possible.
 
 By following these guidelines, clients can ensure a consistent and user-friendly experience when dealing with action-related errors.
+
+## Action Success Response
+
+Action success responses provide a standardized way to communicate successful execution of an action:
+
+```ts
+export interface ActionSuccessResponse {
+    message: string;
+    nextActionCid?: string;
+}
+```
+
+-   `message`: A user-friendly success message to be displayed to the user.
+-   `nextActionCid`: An optional field specifying the CID of the next action to be executed, if any.
+
+Clients should display the success message to users when an action is successfully executed. If a `nextActionCid` is provided, clients should proceed to fetch and execute the specified action.

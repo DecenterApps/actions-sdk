@@ -11,7 +11,7 @@ import {
     txMultiActionSchema,
     transferActionSchema,
     linkActionSchema,
-    actionReferenceSchema,
+    referenceActionSchema,
     linkedActionSchema,
     actionSchema,
 } from './schemas';
@@ -41,7 +41,7 @@ ajv.addSchema(txActionSchema, '#/definitions/txAction');
 ajv.addSchema(txMultiActionSchema, '#/definitions/txMultiAction');
 ajv.addSchema(transferActionSchema, '#/definitions/transferAction');
 ajv.addSchema(linkActionSchema, '#/definitions/linkAction');
-ajv.addSchema(actionReferenceSchema, '#/definitions/actionReference');
+ajv.addSchema(referenceActionSchema, '#/definitions/referenceAction');
 ajv.addSchema(linkedActionSchema, '#/definitions/linkedAction');
 ajv.addSchema(actionSchema, '#/definitions/action');
 

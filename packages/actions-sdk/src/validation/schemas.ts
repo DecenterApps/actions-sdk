@@ -4,12 +4,12 @@ import {
     ConstantParameter,
     ActionInput,
     ActionInputSelectable,
-    ReusedParameter,
+    ReferencedParameter,
     ComputedInput,
     ContractReadInput,
     TypedActionParameter,
     LinkAction,
-    ActionReference,
+    ReferenceAction,
     TransferAction,
     TxAction,
     TxMultiAction,
@@ -36,6 +36,7 @@ export const constantParameterSchema: JSONSchemaType<ConstantParameter> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'constant' },
+        id: { type: 'string' },
         value: {
             oneOf: [
                 { type: 'string' },
@@ -47,7 +48,7 @@ export const constantParameterSchema: JSONSchemaType<ConstantParameter> = {
             ],
         },
     },
-    required: ['type', 'value'],
+    required: ['type', 'id', 'value'],
     additionalProperties: false,
 };
 
@@ -59,26 +60,15 @@ export const actionInputSchema: JSONSchemaType<ActionInput> = {
     properties: {
         type: {
             type: 'string',
-            enum: [
-                'text',
-                'email',
-                'url',
-                'number',
-                'date',
-                'datetime-local',
-                'checkbox',
-                'radio',
-                'textarea',
-                'select',
-                'address',
-            ],
+            enum: ['text', 'number', 'radio', 'select'],
         },
+        id: { type: 'string' },
         scope: { type: 'string', enum: ['USER', 'GLOBAL'] },
         label: { type: 'string' },
         required: { type: 'boolean', nullable: true },
         pattern: { type: 'string', nullable: true },
     },
-    required: ['type', 'scope', 'label'],
+    required: ['type', 'id', 'scope', 'label'],
     additionalProperties: false,
 };
 
@@ -90,6 +80,7 @@ export const actionInputSelectableSchema: JSONSchemaType<ActionInputSelectable> 
         type: 'object',
         properties: {
             type: { type: 'string', const: 'select' },
+            id: { type: 'string' },
             scope: { type: 'string', const: 'USER' },
             label: { type: 'string' },
             options: {
@@ -108,21 +99,20 @@ export const actionInputSelectableSchema: JSONSchemaType<ActionInputSelectable> 
             required: { type: 'boolean', nullable: true },
             pattern: { type: 'string', nullable: true },
         },
-        required: ['type', 'scope', 'label', 'options'],
+        required: ['type', 'id', 'scope', 'label', 'options'],
         additionalProperties: false,
     };
 
 /**
- * Represents the JSON schema for ReusedParameter object.
+ * Represents the JSON schema for ReferencedParameter object.
  */
-export const reusedParameterSchema: JSONSchemaType<ReusedParameter> = {
+export const referencedParameterSchema: JSONSchemaType<ReferencedParameter> = {
     type: 'object',
     properties: {
-        type: { type: 'string', const: 'reused' },
-        sourceTxIndex: { type: 'number' },
-        sourceParamIndex: { type: 'number' },
+        type: { type: 'string', const: 'referenced' },
+        refParameterId: { type: 'string' },
     },
-    required: ['type', 'sourceTxIndex', 'sourceParamIndex'],
+    required: ['type', 'refParameterId'],
     additionalProperties: false,
 };
 
@@ -148,13 +138,14 @@ export const computedInputSchema: JSONSchemaType<ComputedInput> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'computed' },
+        id: { type: 'string' },
         operation: { type: 'string', enum: ['add', 'multiply'] },
         values: {
             type: 'array',
             items: baseParameterSchema,
         },
     },
-    required: ['type', 'operation', 'values'],
+    required: ['type', 'id', 'operation', 'values'],
     additionalProperties: false,
 };
 
@@ -165,6 +156,7 @@ export const contractReadInputSchema: JSONSchemaType<ContractReadInput> = {
     type: 'object',
     properties: {
         type: { type: 'string', const: 'contract-read' },
+        id: { type: 'string' },
         address: { type: 'string' },
         abi: { type: 'string' },
         parameters: {
@@ -173,7 +165,7 @@ export const contractReadInputSchema: JSONSchemaType<ContractReadInput> = {
         },
         returnValueIndex: { type: 'number', nullable: true },
     },
-    required: ['type', 'address', 'abi', 'parameters'],
+    required: ['type', 'id', 'address', 'abi', 'parameters'],
     additionalProperties: false,
 };
 
@@ -199,7 +191,12 @@ export const txActionSchema: JSONSchemaType<TxAction> = {
                 abi: { type: 'string' },
                 parameters: {
                     type: 'array',
-                    items: typedActionParameterSchema,
+                    items: {
+                        anyOf: [
+                            typedActionParameterSchema,
+                            referencedParameterSchema,
+                        ],
+                    },
                 },
                 value: { type: 'string', nullable: true },
             },
@@ -249,7 +246,7 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
                         items: {
                             anyOf: [
                                 typedActionParameterSchema,
-                                reusedParameterSchema,
+                                referencedParameterSchema,
                             ],
                         },
                     },
@@ -315,12 +312,12 @@ export const linkActionSchema: JSONSchemaType<LinkAction> = {
 };
 
 /**
- * Represents the JSON schema for ActionReference object.
+ * Represents the JSON schema for ReferenceAction object.
  */
-export const actionReferenceSchema: JSONSchemaType<ActionReference> = {
+export const referenceActionSchema: JSONSchemaType<ReferenceAction> = {
     type: 'object',
     properties: {
-        type: { type: 'string', const: 'action' },
+        type: { type: 'string', const: 'reference-action' },
         label: { type: 'string' },
         cid: { type: 'string' },
     },
@@ -336,10 +333,29 @@ export const transferActionSchema: JSONSchemaType<TransferAction> = {
     properties: {
         type: { type: 'string', const: 'transfer-action' },
         label: { type: 'string' },
-        address: typedActionParameterSchema,
+        address: {
+            oneOf: [typedActionParameterSchema, referencedParameterSchema],
+        },
         value: { type: 'string' },
+        success: {
+            type: 'object',
+            properties: {
+                message: { type: 'string' },
+                nextActionCid: { type: 'string', nullable: true },
+            },
+            required: ['message'],
+            additionalProperties: false,
+        },
+        error: {
+            type: 'object',
+            properties: {
+                message: { type: 'string' },
+            },
+            required: ['message'],
+            additionalProperties: false,
+        },
     },
-    required: ['type', 'label', 'address', 'value'],
+    required: ['type', 'label', 'address', 'value', 'success', 'error'],
     additionalProperties: false,
 };
 
@@ -350,7 +366,7 @@ export const linkedActionSchema: JSONSchemaType<LinkedAction> = {
     type: 'object',
     oneOf: [
         { $ref: '#/definitions/linkAction' },
-        { $ref: '#/definitions/actionReference' },
+        { $ref: '#/definitions/referenceAction' },
         { $ref: '#/definitions/txAction' },
         { $ref: '#/definitions/txMultiAction' },
         { $ref: '#/definitions/transferAction' },

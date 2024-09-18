@@ -136,7 +136,8 @@ describe('validateAction', () => {
                         chainId: 1,
                         txData: [
                             {
-                                address: '0x123...',
+                                address:
+                                    '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
                                 abi: 'function1(uint256)',
                                 parameters: [
                                     {
@@ -147,7 +148,8 @@ describe('validateAction', () => {
                                 ],
                             },
                             {
-                                address: '0x456...',
+                                address:
+                                    '0x71C7656EC7ab88b098defB751B7401B5f6d8976F',
                                 abi: 'function2(address)',
                                 parameters: [
                                     {
@@ -641,6 +643,95 @@ describe('validateAction', () => {
             expect(result.errors).toContain(
                 '/links/0/displayConfig/displayMode must be equal to one of the allowed values'
             );
+        });
+        test('should invalidate an action with invalid address format', () => {
+            const invalidAction: any = {
+                title: 'Invalid Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid address format',
+                label: 'Invalid Address',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Invalid Address',
+                        chainId: 1,
+                        txData: {
+                            address: '0x124421515',
+                            abi: 'function1(uint256)',
+                            parameters: [
+                                {
+                                    type: 'constant',
+                                    id: 'constantExample',
+                                    value: '0x9876543210987654321098765432109876543210',
+                                },
+                            ],
+                        },
+                        success: {
+                            message: 'Success',
+                        },
+                        error: {
+                            message: 'Error',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidAction);
+            expect(result.valid).toBe(false);
+        });
+        test('should invalidate an action with invalid abi format', () => {
+            const invalidAction: any = {
+                title: 'Invalid Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid abi format',
+                label: 'Invalid Abi Format',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Invalid Tx Format',
+                        chainId: 1,
+                        txData: {
+                            address: '0x124421515',
+                            abi: '123invalidFunc(address)_',
+                            parameters: [
+                                {
+                                    type: 'constant',
+                                    id: 'constantExample',
+                                    value: '0x9876543210987654321098765432109876543210',
+                                },
+                            ],
+                        },
+                        success: {
+                            message: 'Success',
+                        },
+                        error: {
+                            message: 'Error',
+                        },
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidAction);
+            expect(result.valid).toBe(false);
+        });
+
+        test('should invalidate an action with invalid cid format', () => {
+            const invalidAction: any = {
+                title: 'Invalid Action',
+                icon: 'icon-url',
+                description: 'This action has an invalid cid format',
+                label: 'Invalid Cid Format',
+                links: [
+                    {
+                        type: 'reference-action',
+                        label: 'Invalid Reference',
+                        cid: 'Qm219ZNfInvalidHash',
+                    },
+                ],
+            };
+
+            const result = validateAction(invalidAction);
+            expect(result.valid).toBe(false);
         });
     });
 });

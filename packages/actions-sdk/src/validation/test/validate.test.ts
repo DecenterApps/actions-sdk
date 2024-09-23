@@ -376,6 +376,25 @@ describe('validateAction', () => {
             expect(result.valid).toBe(true);
             expect(result.errors).toBeNull();
         });
+        test('should validate a reference action with a valid IPFS CIDs', () => {
+            const validReferenceAction: Action = {
+                title: 'Valid Reference Action',
+                icon: 'icon-url',
+                description: 'This action has a valid reference action',
+                label: 'Valid Reference',
+                links: [
+                    {
+                        type: 'reference-action',
+                        label: 'Valid Reference',
+                        cid: 'QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB',
+                    },
+                ],
+            };
+
+            const result = validateAction(validReferenceAction);
+            expect(result.valid).toBe(true);
+            expect(result.errors).toBeNull();
+        });
     });
 
     describe('Should fail', () => {

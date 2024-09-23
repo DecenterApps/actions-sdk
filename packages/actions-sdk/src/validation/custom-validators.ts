@@ -25,6 +25,7 @@ export function validateCid(data: unknown): boolean {
     }
 
     // Regular expression to validate IPFS CID
-    const ipfsCidRegex = /^[a-z0-9]{46}$/;
+    const ipfsCidRegex = /Qm[1-9A-Za-z]{44}$/;
+
     return ipfsCidRegex.test(data);
 }

@@ -698,41 +698,42 @@ describe('validateAction', () => {
             const result = validateAction(invalidAction);
             expect(result.valid).toBe(false);
         });
-        test('should invalidate an action with invalid abi format', () => {
-            const invalidAction: any = {
-                title: 'Invalid Action',
-                icon: 'icon-url',
-                description: 'This action has an invalid abi format',
-                label: 'Invalid Abi Format',
-                links: [
-                    {
-                        type: 'tx',
-                        label: 'Invalid Tx Format',
-                        chainId: 1,
-                        txData: {
-                            address: '0x124421515',
-                            abi: '123invalidFunc(address)_',
-                            parameters: [
-                                {
-                                    type: 'constant',
-                                    id: 'constantExample',
-                                    value: '0x9876543210987654321098765432109876543210',
-                                },
-                            ],
-                        },
-                        success: {
-                            message: 'Success',
-                        },
-                        error: {
-                            message: 'Error',
-                        },
-                    },
-                ],
-            };
+        // *** Currently function signature validation is disabled ***
+        // test('should invalidate an action with invalid abi format', () => {
+        //     const invalidAction: any = {
+        //         title: 'Invalid Action',
+        //         icon: 'icon-url',
+        //         description: 'This action has an invalid abi format',
+        //         label: 'Invalid Abi Format',
+        //         links: [
+        //             {
+        //                 type: 'tx',
+        //                 label: 'Invalid Tx Format',
+        //                 chainId: 1,
+        //                 txData: {
+        //                     address: '0x124421515',
+        //                     abi: '123invalidFunc(address)_',
+        //                     parameters: [
+        //                         {
+        //                             type: 'constant',
+        //                             id: 'constantExample',
+        //                             value: '0x9876543210987654321098765432109876543210',
+        //                         },
+        //                     ],
+        //                 },
+        //                 success: {
+        //                     message: 'Success',
+        //                 },
+        //                 error: {
+        //                     message: 'Error',
+        //                 },
+        //             },
+        //         ],
+        //     };
 
-            const result = validateAction(invalidAction);
-            expect(result.valid).toBe(false);
-        });
+        //     const result = validateAction(invalidAction);
+        //     expect(result.valid).toBe(false);
+        // });
 
         test('should invalidate an action with invalid cid format', () => {
             const invalidAction: any = {

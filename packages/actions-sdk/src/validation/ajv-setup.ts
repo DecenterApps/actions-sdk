@@ -34,6 +34,7 @@ ajv.addFormat('address', {
     validate: validateAddress,
 });
 
+// *** Currently function signature validation is disabled ***
 ajv.addFormat('abi', {
     type: 'string',
     validate: validateAbi,

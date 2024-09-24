@@ -159,7 +159,7 @@ export const contractReadInputSchema: JSONSchemaType<ContractReadInput> = {
         type: { type: 'string', const: 'contract-read' },
         id: { type: 'string' },
         address: { type: 'string', format: 'address' },
-        abi: { type: 'string', format: 'abi' },
+        abi: { type: 'string' },
         parameters: {
             type: 'array',
             items: baseParameterSchema,
@@ -189,7 +189,7 @@ export const txActionSchema: JSONSchemaType<TxAction> = {
             type: 'object',
             properties: {
                 address: { type: 'string', format: 'address' },
-                abi: { type: 'string', format: 'abi' },
+                abi: { type: 'string' },
                 parameters: {
                     type: 'array',
                     items: {
@@ -245,7 +245,7 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
                 type: 'object',
                 properties: {
                     address: { type: 'string', format: 'address' },
-                    abi: { type: 'string', format: 'abi' },
+                    abi: { type: 'string' },
                     parameters: {
                         type: 'array',
                         items: {

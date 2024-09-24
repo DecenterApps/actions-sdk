@@ -15,7 +15,7 @@ export function validateAbi(data: unknown): boolean {
 
     // Regular expression to validate Ethereum ABI
     const abiFunctionSignatureRegex =
-        /^[a-zA-Z_][a-zA-Z0-9_]*\((([a-zA-Z0-9\[\]]+)(,[a-zA-Z0-9\[\]]+)*)?\)$/;
+        /^(function\s+)?[a-zA-Z_][a-zA-Z0-9_]*\((([a-zA-Z0-9\[\]]+)(,[a-zA-Z0-9\[\]]+)*)?\)$/;
     return abiFunctionSignatureRegex.test(data);
 }
 

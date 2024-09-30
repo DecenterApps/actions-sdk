@@ -698,6 +698,45 @@ describe('validateAction', () => {
             const result = validateAction(invalidAction);
             expect(result.valid).toBe(false);
         });
+
+        test('should invalidate an action with incorrect checksum address', () => {
+            const invalidChecksumAction: any = {
+                title: 'Invalid Checksum Action',
+                icon: 'icon-url',
+                description: 'This action has an address with invalid checksum',
+                label: 'Invalid Checksum',
+                links: [
+                    {
+                        type: 'tx',
+                        label: 'Invalid Checksum Address',
+                        chainId: 1,
+                        txData: {
+                            // This address is valid in format but has an incorrect checksum
+                            // Correct: 0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed
+                            address:
+                                '0x5aaeb6053F3E94C9b9A09f33669435E7Ef1BeAed',
+                            abi: 'function1(uint256)',
+                            parameters: [
+                                {
+                                    type: 'constant',
+                                    id: 'constantExample',
+                                    value: '100',
+                                },
+                            ],
+                        },
+                        success: {
+                            message: 'Success',
+                        },
+                        error: {
+                            message: 'Error',
+                        },
+                    },
+                ],
+            };
+            const result = validateAction(invalidChecksumAction);
+            expect(result.valid).toBe(false);
+        });
+
         // *** Currently function signature validation is disabled ***
         // test('should invalidate an action with invalid abi format', () => {
         //     const invalidAction: any = {

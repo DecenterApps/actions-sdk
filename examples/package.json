@@ -10,7 +10,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "actions-sdk": "^1.0.8"
+        "actions-sdk": "^1.0.9"
     },
     "devDependencies": {
         "ts-node": "^10.9.2"

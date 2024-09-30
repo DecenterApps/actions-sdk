@@ -104,6 +104,7 @@ export interface TxMultiAction extends LinkedActionBase {
  */
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
+    chainId: number;
     address: TypedActionParameter | ReferencedParameter;
     value: string;
     success: ActionSuccessResponse;

@@ -127,6 +127,7 @@ const baseParameterSchema = {
         { $ref: '#/definitions/actionInputSelectable' },
         { $ref: '#/definitions/computedInput' },
         { $ref: '#/definitions/contractReadInput' },
+        { $ref: '#/definitions/referencedParameter' },
     ],
     required: ['type'],
 } as const;
@@ -191,12 +192,7 @@ export const txActionSchema: JSONSchemaType<TxAction> = {
                 abi: { type: 'string' },
                 parameters: {
                     type: 'array',
-                    items: {
-                        anyOf: [
-                            typedActionParameterSchema,
-                            referencedParameterSchema,
-                        ],
-                    },
+                    items: typedActionParameterSchema,
                 },
                 value: { type: 'string', nullable: true },
             },
@@ -243,12 +239,7 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
                     abi: { type: 'string' },
                     parameters: {
                         type: 'array',
-                        items: {
-                            anyOf: [
-                                typedActionParameterSchema,
-                                referencedParameterSchema,
-                            ],
-                        },
+                        items: typedActionParameterSchema,
                     },
                     value: { type: 'string', nullable: true },
                 },
@@ -333,9 +324,8 @@ export const transferActionSchema: JSONSchemaType<TransferAction> = {
     properties: {
         type: { type: 'string', const: 'transfer-action' },
         label: { type: 'string' },
-        address: {
-            oneOf: [typedActionParameterSchema, referencedParameterSchema],
-        },
+        chainId: { type: 'integer' },
+        address: typedActionParameterSchema,
         value: { type: 'string' },
         success: {
             type: 'object',

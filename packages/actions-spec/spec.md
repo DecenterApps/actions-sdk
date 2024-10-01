@@ -89,7 +89,7 @@ export interface ReferenceAction extends LinkedActionBase {
     -   `txData`: Contains details about the transaction, including:
         -   `address`: The contract address for the transaction.
         -   `abi`: The ABI (Application Binary Interface) of the contract.
-        -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
+        -   `parameters`: The parameters required for the transaction, defined as `TypedActionParameter[]`.
         -   `value` (optional): The value to be sent with the transaction.
     -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
     -   `error`: An `ActionError` object defining the error message.
@@ -101,7 +101,7 @@ export interface TxAction extends LinkedActionBase {
     txData: {
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReferencedParameter)[];
+        parameters: TypedActionParameter[];
         value?: string;
     };
     success: ActionSuccessResponse;
@@ -119,7 +119,7 @@ export interface TxAction extends LinkedActionBase {
     -   `txData`: An array of transaction details, each including:
         -   `address`: The contract address for the transaction.
         -   `abi`: The ABI (Application Binary Interface) of the contract.
-        -   `parameters`: The parameters required for the transaction, defined as `(TypedActionParameter | ReferencedParameter)[]`.
+        -   `parameters`: The parameters required for the transaction, defined as `TypedActionParameter[]`.
         -   `value` (optional): The value to be sent with the transaction.
     -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
     -   `error`: An `ActionError` object defining the error message.
@@ -134,7 +134,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReferencedParameter)[];
+        parameters: TypedActionParameter[];
         value?: string;
     }>;
     success: ActionSuccessResponse;
@@ -152,9 +152,9 @@ export interface TxMultiAction extends LinkedActionBase {
 -   **Description**: Represents a native currency transfer action. This type is used to specify a transfer of value from one address to another.
 
 -   **Fields**:
-    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter` or `ReferencedParameter`.
+    -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter`.
     -   `chainId`: The identifier of the blockchain network where the transfer is executed.
-    -   `value`: The amount to be transferred.
+    -   `value`: The amount to be transferred, defined as `TypedActionParameter`.
     -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
     -   `error`: An `ActionError` object defining the error message.
 
@@ -162,7 +162,7 @@ export interface TxMultiAction extends LinkedActionBase {
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
     chainId: number;
-    address: TypedActionParameter | ReferencedParameter;
+    address: TypedActionParameter;
     value: string;
     success: ActionSuccessResponse;
     error: ActionError;
@@ -259,7 +259,8 @@ export type TypedActionParameter =
     | ActionInput
     | ActionInputSelectable
     | ComputedInput
-    | ContractReadInput;
+    | ContractReadInput
+    | ReferencedParameter;
 ```
 
 ### Constant Parameter
@@ -317,7 +318,7 @@ Clients should use this to read data from a smart contract without modifying its
 
 ### Referenced Parameter
 
-Referenced parameters are specifically used within tx and tx-multi actions, allowing parameters to be reused across different parts of an action or across multiple transactions.
+Referenced parameters are allowing parameters to be reused across different parts of an action or across multiple transactions.
 
 ```ts
 export interface ReferencedParameter {

@@ -1,11 +1,11 @@
 import Ajv, { JSONSchemaType } from 'ajv';
 import {
-    actionErrorSchema,
     constantParameterSchema,
     actionInputSchema,
     actionInputSelectableSchema,
     computedInputSchema,
     contractReadInputSchema,
+    referencedParameterSchema,
     typedActionParameterSchema,
     txActionSchema,
     txMultiActionSchema,
@@ -57,6 +57,7 @@ ajv.addSchema(
 );
 ajv.addSchema(computedInputSchema, '#/definitions/computedInput');
 ajv.addSchema(contractReadInputSchema, '#/definitions/contractReadInput');
+ajv.addSchema(referencedParameterSchema, '#/definitions/referencedParameter');
 ajv.addSchema(typedActionParameterSchema, '#/definitions/typedActionParameter');
 ajv.addSchema(txActionSchema, '#/definitions/txAction');
 ajv.addSchema(txMultiActionSchema, '#/definitions/txMultiAction');

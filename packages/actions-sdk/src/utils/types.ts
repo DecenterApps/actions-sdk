@@ -17,7 +17,7 @@
  * - ActionInputSelectable: Represents a selectable action input.
  * - ComputedInput: Represents a computed input.
  * - ContractReadInput: Represents a contract read input.
- * - ReferencedParameter: Represents a reused parameter in tx-multi actions.
+ * - ReferencedParameter: Represents a reused parameter in actions.
  * - InputScope: Represents the scope of an input.
  * - ActionInputType: Represents the type of an action input.
  * - ActionSuccessResponse: Represents success response that can be returned from an action.

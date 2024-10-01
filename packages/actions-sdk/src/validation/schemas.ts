@@ -128,6 +128,7 @@ const baseParameterSchema = {
         { $ref: '#/definitions/actionInputSelectable' },
         { $ref: '#/definitions/computedInput' },
         { $ref: '#/definitions/contractReadInput' },
+        { $ref: '#/definitions/referencedParameter' },
     ],
     required: ['type'],
 } as const;
@@ -192,12 +193,7 @@ export const txActionSchema: JSONSchemaType<TxAction> = {
                 abi: { type: 'string' },
                 parameters: {
                     type: 'array',
-                    items: {
-                        anyOf: [
-                            typedActionParameterSchema,
-                            referencedParameterSchema,
-                        ],
-                    },
+                    items: typedActionParameterSchema,
                 },
                 value: { type: 'string', nullable: true },
             },
@@ -248,12 +244,7 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
                     abi: { type: 'string' },
                     parameters: {
                         type: 'array',
-                        items: {
-                            anyOf: [
-                                typedActionParameterSchema,
-                                referencedParameterSchema,
-                            ],
-                        },
+                        items: typedActionParameterSchema,
                     },
                     value: { type: 'string', nullable: true },
                 },
@@ -339,10 +330,8 @@ export const transferActionSchema: JSONSchemaType<TransferAction> = {
         type: { type: 'string', const: 'transfer-action' },
         label: { type: 'string' },
         chainId: { type: 'integer' },
-        address: {
-            oneOf: [typedActionParameterSchema, referencedParameterSchema],
-        },
-        value: { type: 'string' },
+        address: typedActionParameterSchema,
+        value: typedActionParameterSchema,
         success: {
             type: 'object',
             properties: {

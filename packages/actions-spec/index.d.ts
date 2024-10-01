@@ -72,7 +72,7 @@ export interface TxAction extends LinkedActionBase {
     txData: {
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReferencedParameter)[];
+        parameters: TypedActionParameter[];
         value?: string;
     };
     success: ActionSuccessResponse;
@@ -88,7 +88,7 @@ export interface TxMultiAction extends LinkedActionBase {
     txData: Array<{
         address: string;
         abi: string;
-        parameters: (TypedActionParameter | ReferencedParameter)[];
+        parameters: TypedActionParameter[];
         value?: string;
     }>;
     success: ActionSuccessResponse;
@@ -105,8 +105,8 @@ export interface TxMultiAction extends LinkedActionBase {
 export interface TransferAction extends LinkedActionBase {
     type: 'transfer-action';
     chainId: number;
-    address: TypedActionParameter | ReferencedParameter;
-    value: string;
+    address: TypedActionParameter;
+    value: TypedActionParameter;
     success: ActionSuccessResponse;
     error: ActionError;
 }
@@ -119,7 +119,8 @@ export type TypedActionParameter =
     | ActionInput
     | ActionInputSelectable
     | ComputedInput
-    | ContractReadInput;
+    | ContractReadInput
+    | ReferencedParameter;
 
 /**
  * Constant parameter for an Action

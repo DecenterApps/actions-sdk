@@ -14,7 +14,11 @@ const links: LinkedAction[] = [
             id: 'Address',
             value: '0x6a8cfF99b2856372bC8EaE39E2c413832E4C12e0',
         },
-        value: '10000000000000000',
+        value: {
+            type: 'constant',
+            id: 'Value',
+            value: '10000000000',
+        },
         success: {
             message: 'Ether sent',
         },
@@ -25,7 +29,7 @@ const links: LinkedAction[] = [
     {
         type: 'reference-action',
         label: 'Next Content Creator ⏭️',
-        cid: 'QmZ2dfagw22415fsafasf',
+        cid: 'QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB',
     },
 ];
 

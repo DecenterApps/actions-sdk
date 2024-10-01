@@ -187,6 +187,7 @@ describe('validateAction', () => {
                     {
                         type: 'transfer-action',
                         label: 'Send ETH',
+                        chainId: 1,
                         address: {
                             type: 'text',
                             id: 'Receiver',

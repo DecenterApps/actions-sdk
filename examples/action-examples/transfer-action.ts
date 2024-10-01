@@ -1,4 +1,4 @@
-import { Action, ActionError, LinkedAction } from 'actions-sdk';
+import { Action, ActionError, LinkedAction, chainId } from 'actions-sdk';
 
 const error: ActionError = {
     message: 'Error displaying blink',
@@ -8,6 +8,7 @@ const links: LinkedAction[] = [
     {
         type: 'transfer-action',
         label: 'Send 0.01 ETH',
+        chainId: chainId.ETHEREUM_MAINNET,
         address: {
             type: 'constant',
             id: 'Address',

@@ -16,6 +16,7 @@ import {
     LinkedAction,
     Action,
 } from 'actions-spec';
+import { format } from 'path';
 
 /**
  * Represents the JSON schema for an ActionError object.
@@ -158,7 +159,7 @@ export const contractReadInputSchema: JSONSchemaType<ContractReadInput> = {
     properties: {
         type: { type: 'string', const: 'contract-read' },
         id: { type: 'string' },
-        address: { type: 'string' },
+        address: { type: 'string', format: 'address' },
         abi: { type: 'string' },
         parameters: {
             type: 'array',
@@ -188,7 +189,7 @@ export const txActionSchema: JSONSchemaType<TxAction> = {
         txData: {
             type: 'object',
             properties: {
-                address: { type: 'string' },
+                address: { type: 'string', format: 'address' },
                 abi: { type: 'string' },
                 parameters: {
                     type: 'array',
@@ -203,7 +204,11 @@ export const txActionSchema: JSONSchemaType<TxAction> = {
             type: 'object',
             properties: {
                 message: { type: 'string' },
-                nextActionCid: { type: 'string', nullable: true },
+                nextActionCid: {
+                    type: 'string',
+                    format: 'cid',
+                    nullable: true,
+                },
             },
             required: ['message'],
             additionalProperties: false,
@@ -235,7 +240,7 @@ export const txMultiActionSchema: JSONSchemaType<TxMultiAction> = {
             items: {
                 type: 'object',
                 properties: {
-                    address: { type: 'string' },
+                    address: { type: 'string', format: 'address' },
                     abi: { type: 'string' },
                     parameters: {
                         type: 'array',
@@ -310,7 +315,7 @@ export const referenceActionSchema: JSONSchemaType<ReferenceAction> = {
     properties: {
         type: { type: 'string', const: 'reference-action' },
         label: { type: 'string' },
-        cid: { type: 'string' },
+        cid: { type: 'string', format: 'cid' },
     },
     required: ['type', 'label', 'cid'],
     additionalProperties: false,
@@ -331,7 +336,11 @@ export const transferActionSchema: JSONSchemaType<TransferAction> = {
             type: 'object',
             properties: {
                 message: { type: 'string' },
-                nextActionCid: { type: 'string', nullable: true },
+                nextActionCid: {
+                    type: 'string',
+                    format: 'cid',
+                    nullable: true,
+                },
             },
             required: ['message'],
             additionalProperties: false,

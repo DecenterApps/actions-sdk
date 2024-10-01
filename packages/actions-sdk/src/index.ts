@@ -13,3 +13,10 @@ export { deployToIpfs, PinataCredentials } from './utils/deployToIpfs';
 
 // Exporting the validateAction function from validation/validate.ts
 export { validateAction } from './validation/validate';
+
+// Exporting validation helper functions from validation/custom-validators.ts
+export {
+    validateAddress,
+    validateAbi,
+    validateCid,
+} from './validation/custom-validators';

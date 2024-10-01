@@ -15,6 +15,7 @@ import {
     linkedActionSchema,
     actionSchema,
 } from './schemas';
+import { validateAddress, validateAbi, validateCid } from './custom-validators';
 
 /**
  * Create an instance of Ajv.
@@ -23,6 +24,26 @@ import {
  * @property {boolean} allErrors - Collects all errors instead of stopping on the first error.
  */
 const ajv = new Ajv({ discriminator: true, allErrors: true });
+
+/**
+ * Add custom formats for address, abi and IPFS CID to the Ajv instance.
+ */
+
+ajv.addFormat('address', {
+    type: 'string',
+    validate: validateAddress,
+});
+
+// *** Currently function signature validation is disabled ***
+ajv.addFormat('abi', {
+    type: 'string',
+    validate: validateAbi,
+});
+
+ajv.addFormat('cid', {
+    type: 'string',
+    validate: validateCid,
+});
 
 /**
  * Add all schema definitions to the Ajv instance.

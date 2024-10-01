@@ -154,7 +154,7 @@ export interface TxMultiAction extends LinkedActionBase {
 -   **Fields**:
     -   `address`: The recipient address for the transfer, defined as a `TypedActionParameter`.
     -   `chainId`: The identifier of the blockchain network where the transfer is executed.
-    -   `value`: The amount to be transferred.
+    -   `value`: The amount to be transferred, defined as `TypedActionParameter`.
     -   `success`: An `ActionSuccessResponse` object defining the success message and optional next action.
     -   `error`: An `ActionError` object defining the error message.
 

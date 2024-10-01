@@ -19,7 +19,8 @@
         "@pinata/sdk": "^2.1.0",
         "actions-spec": "^1.1.1",
         "ajv": "^8.17.1",
-        "ajv-formats": "^3.0.1"
+        "ajv-formats": "^3.0.1",
+        "js-sha3": "^0.9.3"
     },
     "devDependencies": {
         "@types/jest": "^29.5.12",

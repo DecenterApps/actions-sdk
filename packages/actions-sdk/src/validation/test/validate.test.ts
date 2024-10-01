@@ -194,7 +194,11 @@ describe('validateAction', () => {
                             scope: 'USER',
                             label: 'Recipient Address',
                         },
-                        value: '1000000000000000000', // 1 ETH in wei
+                        value: {
+                            type: 'constant',
+                            id: 'Amount',
+                            value: 1e18,
+                        }, // 1 ETH in wei
                         success: {
                             message: 'Ether is sent',
                         },

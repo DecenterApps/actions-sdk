@@ -331,7 +331,7 @@ export const transferActionSchema: JSONSchemaType<TransferAction> = {
         label: { type: 'string' },
         chainId: { type: 'integer' },
         address: typedActionParameterSchema,
-        value: { type: 'string' },
+        value: typedActionParameterSchema,
         success: {
             type: 'object',
             properties: {

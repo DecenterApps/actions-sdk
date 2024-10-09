@@ -8,7 +8,7 @@ const error: ActionError = {
 const links: LinkedAction[] = [
     {
         type: 'tx',
-        label: 'Payment Action',
+        label: 'Subscribe for 10 DAI',
         chainId: chainId.ETHEREUM_MAINNET,
         txData: {
             address: '0x6B175474E89094C44Da98b954EedeAC495271d0F', // Token contract address

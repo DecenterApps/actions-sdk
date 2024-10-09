@@ -8,10 +8,10 @@ const error: ActionError = {
 const links: LinkedAction[] = [
     {
         type: 'tx',
-        label: 'NFT Sale',
+        label: 'Buy Milady #234 for PLACEHOLDER_VALUE ETH',
         chainId: chainId.ETHEREUM_MAINNET,
         txData: {
-            address: '0x5Af0D9827E0c53E4799BB226655A1de152A425a5', // NFTActionHandler contract address
+            address: '0x5Af0D9827E0c53E4799BB226655A1de152A425a5', // NFTActionHelper contract address
             abi: 'fulfillOrder(address,uint256)',
             parameters: [
                 {

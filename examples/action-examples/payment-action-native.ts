@@ -8,7 +8,7 @@ const error: ActionError = {
 const links: LinkedAction[] = [
     {
         type: 'transfer-action',
-        label: 'Payment Action',
+        label: 'Subscribe for 0.01 ETH',
         chainId: chainId.ETHEREUM_MAINNET,
         address: {
             type: 'constant',
